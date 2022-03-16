@@ -18,9 +18,11 @@ public class main extends ApplicationAdapter {
     Click click = new Click();
     int clickx = -1;
     int clicky = -1;
+    int clickrx = -1;
+    int clickry = -1;
     boolean build = true;
     Figures bauer;
-    ArrayList<Figures> figures = new ArrayList();
+    ArrayList<Figures> figures = new ArrayList<>();
     int[] bewegenmalen = null;
     Calculate calculate = new Calculate();
     Figures clickf = null;
@@ -31,11 +33,11 @@ public class main extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         field.generatField();
-        bauer = new Bauer(1, 5, 5);
+        bauer = new Bauer(1, 4, 3);
         figures.add(bauer);
-        bauer = new Bauer(2, 10, 10);
+        bauer = new Bauer(2, 12, 3);
         figures.add(bauer);
-        bauer = new Bauer(1, 6, 5);
+        bauer = new Bauer(1, 8, 3);
         figures.add(bauer);
     }
 
@@ -47,6 +49,10 @@ public class main extends ApplicationAdapter {
             clicky = click.clicksx();
             clickx = click.clicksy();
         }
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
+            clickry = click.clicksx();
+            clickrx = click.clicksy();
+        }
         if (build) {
             buildphase();
         } else {
@@ -55,12 +61,13 @@ public class main extends ApplicationAdapter {
         for (int i = 1; i < field.getFieldparts().size(); i++) {
             Fieldparts fields = field.getFieldparts().get(i);
             drawfield(fields, i);
-            for (int j = 0; j < figures.size(); j++) {
-                drawfigures(fields, figures.get(j));
-                clickfigures(fields, i, figures.get(j));
+            for (Figures figure : figures) {
+                drawfigures(fields, figure);
+                clickfigures(fields, i, figure);
 
             }
             movefigur(fields, i);
+            attackfigure(fields, i);
         }
 
         batch.end();
@@ -74,8 +81,14 @@ public class main extends ApplicationAdapter {
 
     public void drawfield(Fieldparts fields, int i) {
 
+        if (playerturn == 1) {
+            batch.draw(new Texture("Spieler1.png"), 2300, 0);
+        } else {
+            batch.draw(new Texture("Spieler2.png"), 2300, 0);
+        }
         if (build) {
             if (i == 6 || i == 7 || i == 8 || i == 163 || i == 162 || i == 164) {
+
             } else if (i <= 13 * 3) {
                 batch.draw(fields.getTextures().get(4), fields.Xpix, fields.Ypix);
             } else if (i >= 13 * 10 + 1) {
@@ -89,20 +102,22 @@ public class main extends ApplicationAdapter {
             } else {
                 batch.draw(fields.getTextures().get(0), fields.Xpix, fields.Ypix);
             }
-            if (attackmalen != null && bewegenmalen != null) {
-                for (int j = 0; j < attackmalen.length; j++) {
-                    if (attackmalen[j] == i && attackmalen[j] > 0 && attackmalen[j] < 170) {
+            if (attackmalen != null) {
+                for (int value : attackmalen) {
+                    if (value == i && value > 0 && value < 170) {
                         batch.draw(fields.getTextures().get(2), fields.Xpix, fields.Ypix);
                     }
                 }
-                for (int j = 0; j < bewegenmalen.length; j++) {
-                    for (int k = 0; k < figures.size(); k++) {
-                        if (bewegenmalen[j] == i && bewegenmalen[j] > 0 && bewegenmalen[j] < 170 && fields.X == figures.get(k).getX() && fields.Y == figures.get(k).getY() && figures.get(k).getPlayer() != playerturn) {
-                            batch.draw(fields.getTextures().get(2), fields.Xpix, fields.Ypix);
-                        } else if (bewegenmalen[j] == i && bewegenmalen[j] > 0 && bewegenmalen[j] < 170 && fields.X == figures.get(k).getX() && fields.Y == figures.get(k).getY() && figures.get(k).getPlayer() == playerturn) {
-                            batch.draw(fields.getTextures().get(0), fields.Xpix, fields.Ypix);
-                        } else if (bewegenmalen[j] == i && bewegenmalen[j] > 0 && bewegenmalen[j] < 170) {
-                            batch.draw(fields.getTextures().get(1), fields.Xpix, fields.Ypix);
+                if (bewegenmalen != null) {
+                    for (int value : bewegenmalen) {
+                        for (Figures figure : figures) {
+                            if (value == i && value > 0 && value < 170 && fields.X == figure.getX() && fields.Y == figure.getY() && figure.getPlayer() != playerturn) {
+                                batch.draw(fields.getTextures().get(2), fields.Xpix, fields.Ypix);
+                            } else if (value == i && value > 0 && value < 170 && fields.X == figure.getX() && fields.Y == figure.getY() && figure.getPlayer() == playerturn) {
+                                batch.draw(fields.getTextures().get(0), fields.Xpix, fields.Ypix);
+                            } else if (value == i && value > 0 && value < 170) {
+                                batch.draw(fields.getTextures().get(1), fields.Xpix, fields.Ypix);
+                            }
                         }
                     }
                 }
@@ -123,34 +138,66 @@ public class main extends ApplicationAdapter {
 
     public void clickfigures(Fieldparts fields, int j, Figures figur) {
         if (figur.getX() == clickx && figur.getY() == clicky && fields.X == clickx && fields.Y == clicky && bewegenmalen == null) {
-            bewegenmalen = calculate.calculatmove(clickx, clicky, j, figures);
-            attackmalen = calculate.calculateattack(clickx, clicky, j, figures);
+            bewegenmalen = calculate.calculatmove(clickx, clicky, j, figur);
+            attackmalen = calculate.calculateattack(clickx, clicky, j, figur);
             clickf = figur;
-        } else if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
-            clickx = -1;
-            clicky = -1;
-            bewegenmalen = null;
-            attackmalen = null;
-            clickf = null;
+        } else if (figur.getX() != clickrx && figur.getY() != clickry && fields.X == clickrx && fields.Y == clickry) {
+            resetclick();
         }
     }
 
     public void movefigur(Fieldparts fields, int i) {
-        if (fields.X == clickx && fields.Y == clicky && bewegenmalen != null && clickf.getPlayer() == playerturn) {
+        boolean moveble = true;
+        if (fields.X == clickrx && fields.Y == clickry && bewegenmalen != null && clickf.getPlayer() == playerturn) {
             for (int j = 0; j < bewegenmalen.length; j++) {
-                if (bewegenmalen[j] == i) {
-                    clickf.setX(clickx);
-                    clickf.setY(clicky);
-                    bewegenmalen = null;
-                    attackmalen = null;
-                    clickx = -1;
-                    clicky = -1;
-                    clickf = null;
+                for (Figures figure : figures) {
+                    if (fields.X == figure.getX() && fields.Y == figure.getY()) {
+                        moveble = false;
+                        break;
+                    }
+                }
+                if (bewegenmalen[j] == i && moveble) {
+                    clickf.setX(clickrx);
+                    clickf.setY(clickry);
+                    clickf.setMoved(true);
+                    resetclick();
                     break;
                 }
             }
         }
     }
+
+    public void attackfigure(Fieldparts fields, int i) {
+        boolean attackeble = false;
+        Figures attacked = null;
+        if (fields.X == clickrx && fields.Y == clickry && attackmalen != null && clickf.getPlayer() == playerturn) {
+            for (int j = 0; j < attackmalen.length; j++) {
+                for (Figures figure : figures) {
+                    if (attackmalen[j] == i && fields.X == figure.getX() && fields.Y == figure.getY() && figure.getPlayer() != playerturn) {
+                        attackeble = true;
+                        attacked = figure;
+                    }
+                }
+                if (attackeble) {
+                    if (attacked.getPlayer() == 1) {
+                        attacked.setX(attacked.getX() - 1);
+                        attacked.setLive(attacked.getLive() - clickf.getAttack());
+                    } else {
+                        attacked.setX(attacked.getX() + 1);
+                        attacked.setLive(attacked.getLive() - clickf.getAttack());
+                    }
+                    clickf.setX(clickrx);
+                    clickf.setY(clickry);
+                    clickf.setMoved(true);
+                    clickf.setAttacked(true);
+                    resetclick();
+                    attacked = null;
+                    break;
+                }
+            }
+        }
+    }
+
 
     public void buildphase() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && playerturn == 1) {
@@ -159,13 +206,32 @@ public class main extends ApplicationAdapter {
             build = false;
             playerturn = 1;
         }
+
     }
 
     public void gamephase() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && playerturn == 1) {
             playerturn = 2;
+            for (Figures figure : figures) {
+                figure.setMoved(false);
+            }
+            resetclick();
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && playerturn == 2) {
             playerturn = 1;
+            for (Figures figure : figures) {
+                figure.setMoved(false);
+            }
+            resetclick();
         }
+    }
+
+    public void resetclick() {
+        bewegenmalen = null;
+        attackmalen = null;
+        clickrx = -1;
+        clickry = -1;
+        clickx = -1;
+        clicky = -1;
+        clickf = null;
     }
 }

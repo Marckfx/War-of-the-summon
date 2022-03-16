@@ -14,7 +14,9 @@ public class Figures {
     int attackrange;
 int spawntime;
 int player;
-    public Figures(int player, int x, int y, int maxlive, int attack,int attackrange, int move, Texture sprite1, Texture sprite2, Texture spriteclick1, Texture spriteclick2,int spawntime) {
+boolean moved;
+boolean attacked;
+    public Figures(int player, int x, int y, int maxlive, int attack,int attackrange, int move, Texture sprite1, Texture sprite2, Texture spriteclick1, Texture spriteclick2,int spawntime,boolean moved,boolean attacked) {
         this.x = x;
         this.y = y;
         this.maxlive=maxlive;
@@ -23,6 +25,8 @@ int player;
         this.spawntime=spawntime;
         this.attackrange=attackrange;
         this.player=player;
+        this.moved=moved;
+        this.attacked=attacked;
 
         if (player == 1) {
             sprite = sprite1;
@@ -79,5 +83,21 @@ int player;
 
     public int getPlayer() {
         return player;
+    }
+
+    public boolean isMoved() {
+        return moved;
+    }
+
+    public void setMoved(boolean moved) {
+        this.moved = moved;
+    }
+
+    public boolean isAttacked() {
+        return attacked;
+    }
+
+    public void setAttacked(boolean attacked) {
+        this.attacked = attacked;
     }
 }
