@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Figures {
     int maxlive;
-    int live = maxlive;
+    int live ;
     int attack;
     int move;
     Texture sprite;
@@ -16,12 +16,13 @@ int spawntime;
 int player;
 boolean moved;
 boolean attacked;
-    public Figures(int player, int x, int y, int maxlive, int attack,int attackrange, int move, Texture sprite1, Texture sprite2, Texture spriteclick1, Texture spriteclick2,int spawntime,boolean moved,boolean attacked) {
+    public Figures(int player, int x, int y, int maxlive,int live, int attack,int attackrange, int move, Texture sprite1, Texture sprite2, Texture spriteclick1, Texture spriteclick2,int spawntime,boolean moved,boolean attacked) {
         this.x = x;
         this.y = y;
         this.maxlive=maxlive;
         this.attack=attack;
         this.move=move;
+        this.live=live;
         this.spawntime=spawntime;
         this.attackrange=attackrange;
         this.player=player;

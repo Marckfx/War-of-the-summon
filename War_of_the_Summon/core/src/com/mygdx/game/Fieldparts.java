@@ -1,8 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
-
-import java.awt.*;
 import java.util.ArrayList;
 
 public class Fieldparts {
@@ -10,12 +8,7 @@ public class Fieldparts {
     int Y = 0;
     int Xpix=0;
     int Ypix=0;
-    Texture empty = new Texture("Feldleer.png");
-    Texture move = new Texture("Feldanbewegen.png");
-    Texture attack = new Texture("Feldangriff.png");
-    Texture action = new Texture("Feldaktion.png");
-    Texture castle1 = new Texture("Feldanfeste1.png");
-    Texture castle2 = new Texture("Feldanfeste2.png");
+    Textures texture =new Textures();
     ArrayList<Texture> textures = new ArrayList();
 
     public Fieldparts(int Xpix, int Ypix,int X,int Y) {
@@ -23,16 +16,25 @@ public class Fieldparts {
         this.Y = Y;
         this.Xpix=Xpix;
         this.Ypix=Ypix;
-        textures.add(empty);
-        textures.add(move);
-        textures.add(attack);
-        textures.add(action);
-        textures.add(castle1);
-        textures.add(castle2);
+        textures.add(texture.getEmpty());
+        textures.add(texture.getMove());
+        textures.add(texture.getAttack());
+        textures.add(texture.getAction());
+        textures.add(texture.getCastle1());
+        textures.add(texture.getCastle2());
 
+    }
+
+    public int getX() {
+        return X;
+    }
+
+    public int getY() {
+        return Y;
     }
 
     public ArrayList<Texture> getTextures() {
         return textures;
     }
 }
+
