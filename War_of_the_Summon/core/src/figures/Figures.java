@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Figures {
     int maxlive;
-    int live ;
+    int live;
     int attack;
     int move;
     Texture sprite;
@@ -12,22 +12,25 @@ public class Figures {
     int x;
     int y;
     int attackrange;
-int spawntime;
-int player;
-boolean moved;
-boolean attacked;
-    public Figures(int player, int x, int y, int maxlive,int live, int attack,int attackrange, int move, Texture sprite1, Texture sprite2, Texture spriteclick1, Texture spriteclick2,int spawntime,boolean moved,boolean attacked) {
+    int spawntime;
+    int player;
+    boolean moved;
+    boolean attacked;
+    String name;
+
+    public Figures(String name, int player, int x, int y, int maxlive, int live, int attack, int attackrange, int move, Texture sprite1, Texture sprite2, Texture spriteclick1, Texture spriteclick2, int spawntime, boolean moved, boolean attacked) {
+        this.name = name;
         this.x = x;
         this.y = y;
-        this.maxlive=maxlive;
-        this.attack=attack;
-        this.move=move;
-        this.live=live;
-        this.spawntime=spawntime;
-        this.attackrange=attackrange;
-        this.player=player;
-        this.moved=moved;
-        this.attacked=attacked;
+        this.maxlive = maxlive;
+        this.attack = attack;
+        this.move = move;
+        this.live = live;
+        this.spawntime = spawntime;
+        this.attackrange = attackrange;
+        this.player = player;
+        this.moved = moved;
+        this.attacked = attacked;
 
         if (player == 1) {
             sprite = sprite1;
@@ -36,6 +39,10 @@ boolean attacked;
             sprite = sprite2;
             spriteclick = spriteclick2;
         }
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getX() {
