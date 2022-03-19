@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
+
 import java.util.ArrayList;
 
 public class Fieldparts {
@@ -22,7 +23,6 @@ public class Fieldparts {
         textures.add(texture.getAction());
         textures.add(texture.getCastle1());
         textures.add(texture.getCastle2());
-
     }
 
     public int getX() {

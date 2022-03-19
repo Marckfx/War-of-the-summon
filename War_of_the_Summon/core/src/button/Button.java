@@ -1,32 +1,35 @@
-package com.mygdx.game;
+package button;
 
 import com.badlogic.gdx.graphics.Texture;
-import figures.Figures;
+import com.mygdx.game.Textures;
 
 public class Button {
-    Texture texture;
-    Texture textureclick;
     int Xpix;
     int Ypix;
     int x;
     int y;
-    public Button(int XPix, int YPix, int x , int y, Texture texture, Texture textureclick) {
-        this.texture=texture;
-        this.textureclick=textureclick;
-        this.x=x;
-        this.y=y;
-        this.Xpix=XPix;
-        this.Ypix=YPix;
+
+    public Button(int XPix, int YPix, int x, int y) {
+        this.Xpix = XPix;
+        this.Ypix = YPix;
+        this.x = x;
+        this.y = y;
     }
 
-
-
     public Texture getTexture() {
-        return texture;
+        return null;
     }
 
     public Texture getTextureclick() {
-        return textureclick;
+        return null;
+    }
+
+    public Texture getTexture2() {
+        return null;
+    }
+
+    public Texture getTextureclick2() {
+        return null;
     }
 
     public int getXpix() {
