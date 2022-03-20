@@ -14,6 +14,9 @@ import figures.Bauer;
 import figures.Castle;
 import figures.Figures;
 
+import java.io.*;
+import java.net.*;
+
 import java.util.ArrayList;
 
 public class main extends ApplicationAdapter {
@@ -27,8 +30,8 @@ public class main extends ApplicationAdapter {
     int clickrx = -1;
     int clickry = -1;
     int playerturn = 1;
-    int player1live = 40;
-    int player2live = 40;
+    int player1live = 45;
+    int player2live = 45;
     int buildfigure = -1;
     int turnbuild = 0;
     boolean newturn = false;
@@ -40,18 +43,25 @@ public class main extends ApplicationAdapter {
     Figures clickf = null;
     Castle castle;
     ArrayList<Figures> figures = new ArrayList<>();
-    String test = "";
+    boolean player1win = false;
+    boolean player2win = false;
+    boolean gamestart = false;
+    Socket socket;
+    int player = 0;
+    String sendstring;
+    String becomestring;
 
     @Override
     public void create() {
+        connection();
         batch = new SpriteBatch();
         field.generatField();
         buildbuttons.Buildbutton();
-        castle = new Castle(1, 0, 5, 15);
+        castle = new Castle(1, 0, 5, 1);
         figures.add(castle);
-        castle = new Castle(1, 0, 6, 15);
+        castle = new Castle(1, 0, 6, 0);
         figures.add(castle);
-        castle = new Castle(1, 0, 7, 15);
+        castle = new Castle(1, 0, 7, 0);
         figures.add(castle);
         castle = new Castle(2, 12, 5, 15);
         figures.add(castle);
@@ -59,41 +69,42 @@ public class main extends ApplicationAdapter {
         figures.add(castle);
         castle = new Castle(2, 12, 7, 15);
         figures.add(castle);
-
     }
 
     @Override
     public void render() {
         ScreenUtils.clear(0, 0, 0, 1);
         batch.begin();
-        if (newturn) {
-            getsend();
-        }
-        clickhandler();
-
-        if (build) {
-            buildphase();
-        } else {
-            gamephase();
-        }
-        for (int i = 1; i < field.getFieldparts().size(); i++) {
-            Fieldparts fields = field.getFieldparts().get(i);
-            drawfield(fields, i);
-            for (Figures figure : figures) {
-                drawfigures(fields, figure);
-                clickfigures(fields, i, figure);
+        if (gamestart&&!player1win&&!player2win) {
+            if (newturn) {
+                getsend();
             }
-            movefigur(fields, i);
-            attackfigure(fields, i);
+            if (player == playerturn) {
+                clickhandler();
+                if (build) {
+                    buildphase();
+                } else {
+                    gamephase();
+                }
+            }
+            for (int i = 1; i < field.getFieldparts().size(); i++) {
+                Fieldparts fields = field.getFieldparts().get(i);
+                drawfield(fields, i);
+                for (Figures figure : figures) {
+                    drawfigures(fields, figure);
+                    clickfigures(fields, i, figure);
+                }
+                movefigur(fields, i);
+                attackfigure(fields, i);
+            }
+            if (buildfigur != null) {
+                figures.add(buildfigur);
+                buildfigur = null;
+            }
+            drawstats();
+            deletdeadfigurs();
         }
-
-        if (buildfigur != null) {
-            figures.add(buildfigur);
-            buildfigur = null;
-        }
-        drawstats();
-        deletdeadfigurs();
-
+        end();
         batch.end();
     }
 
@@ -106,6 +117,7 @@ public class main extends ApplicationAdapter {
     public void deletdeadfigurs() {
         Figures deletme = null;
         for (Figures dead : figures) {
+            if(!(dead instanceof Castle))
             if (dead.getLive() <= 0) {
                 deletme = dead;
             }
@@ -135,11 +147,11 @@ public class main extends ApplicationAdapter {
             figurstats.draw(batch, "clickrx: " + clickrx, 2300, 200);
             figurstats.draw(batch, "clickry: " + clickry, 2300, 220);
         }
-
+        BitmapFont figurstats = new BitmapFont();
+        figurstats.draw(batch, "Du bist Spieler " + player, 2300, 1750);
     }
 
     public void drawfield(Fieldparts fields, int i) {
-
         if (playerturn == 1) {
             batch.draw(new Texture("Spieler1.png"), 2300, 0);
         } else {
@@ -196,7 +208,8 @@ public class main extends ApplicationAdapter {
     }
 
     public void getsend() {
-        String send = test;
+
+        String send = becomestring;
         String[] resultfigure = send.split("-");
         ArrayList<Figures> figuressend = new ArrayList<>();
         for (String figurestring : resultfigure) {
@@ -254,9 +267,9 @@ public class main extends ApplicationAdapter {
             }
 
         } else if (clickf != null && clickrx > 0 && clickry > 0) {
-            for (int i = 0; i < attackmalen.length; i++) {
-                if (attackmalen[i] >= 0) {
-                    if (field.getFieldparts().get(attackmalen[i]).getX() == clickrx && field.getFieldparts().get(attackmalen[i]).getY() == clickry) {
+            for (int k : attackmalen) {
+                if (k >= 0) {
+                    if (field.getFieldparts().get(k).getX() == clickrx && field.getFieldparts().get(k).getY() == clickry) {
                         reset = false;
                         break;
                     }
@@ -271,14 +284,14 @@ public class main extends ApplicationAdapter {
     public void movefigur(Fieldparts fields, int i) {
         boolean moveble = true;
         if (fields.X == clickrx && fields.Y == clickry && bewegenmalen != null && clickf.getPlayer() == playerturn) {
-            for (int j = 0; j < bewegenmalen.length; j++) {
+            for (int k : bewegenmalen) {
                 for (Figures figure : figures) {
                     if (fields.X == figure.getX() && fields.Y == figure.getY()) {
                         moveble = false;
                         break;
                     }
                 }
-                if (bewegenmalen[j] == i && moveble) {
+                if (k == i && moveble) {
                     clickf.setX(clickrx);
                     clickf.setY(clickry);
                     clickf.setMoved(true);
@@ -293,9 +306,9 @@ public class main extends ApplicationAdapter {
         boolean attackeble = false;
         Figures attacked = null;
         if (fields.X == clickrx && fields.Y == clickry && attackmalen != null && clickf.getPlayer() == playerturn) {
-            for (int j = 0; j < attackmalen.length; j++) {
+            for (int k : attackmalen) {
                 for (Figures figure : figures) {
-                    if (attackmalen[j] == i && fields.X == figure.getX() && fields.Y == figure.getY() && figure.getPlayer() != playerturn) {
+                    if (k == i && fields.X == figure.getX() && fields.Y == figure.getY() && figure.getPlayer() != playerturn) {
                         attackeble = true;
                         attacked = figure;
                     }
@@ -333,7 +346,6 @@ public class main extends ApplicationAdapter {
         }
     }
 
-
     public void buildphase() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || turnend) {
             if (playerturn == 1) {
@@ -345,7 +357,6 @@ public class main extends ApplicationAdapter {
             turnend = false;
             resetclick();
             send();
-            newturn = true;
         }
         if (turnbuild == 2) {
             build = false;
@@ -364,7 +375,6 @@ public class main extends ApplicationAdapter {
             }
             send();
             resetclick();
-            newturn = true;
         }
 
     }
@@ -391,10 +401,138 @@ public class main extends ApplicationAdapter {
     }
 
     public void send() {
-        String sendstring = "";
+        sendstring = "";
         for (Figures sendfigures : figures) {
             sendstring += sendfigures.getName() + "#" + sendfigures.getPlayer() + "#" + sendfigures.getLive() + "#" + sendfigures.getX() + "#" + sendfigures.getY() + "-";
-            test = sendstring;
+        }
+        System.out.println(sendstring);
+        Thread t1 = new Thread(new Client(socket));
+        t1.start();
+    }
+
+    public void end() {
+        Texture win;
+        if( figures!=null){
+            player1live=0;
+            player2live=0;
+        for (Figures castlelive:figures) {
+            if(castlelive instanceof Castle){
+                if(castlelive.getPlayer()==1){
+
+                    player1live+=castlelive.getLive();
+                }else if(castlelive.getPlayer()==2){
+
+                    player2live+=castlelive.getLive();
+                }
+            }
+        }}
+        if (player1live <= 0) {
+            resetclick();
+            player2win = true;
+
+        } else if (player2live <= 0) {
+            resetclick();
+            player1win = true;
+        }
+        if (player1win || player2win) {
+            figures = null;
+            field = null;
+            if (player2win) {
+                win = new Texture("Player2win.png");
+                batch.draw(win, 1200, 950);
+            } else if (player1win) {
+                win = new Texture("Player2win.png");
+                batch.draw(win, 1200, 950);
+            }
         }
     }
+
+
+    public void connection() {
+        try {
+            socket = new Socket("185.194.217.213", 25565);
+            Thread t2 = new Thread(new Listener(socket));
+            t2.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    class Client extends Thread {
+
+        PrintWriter writer;
+
+        public Client(Socket socket) {
+
+            try {
+                writer = new PrintWriter(socket.getOutputStream(), true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public void run() {
+            try {
+                writer.println(sendstring);
+                writer.flush();
+                join();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class Listener extends Thread {
+        BufferedReader reader;
+
+        public Listener(Socket socket) {
+            try {
+                reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public void run() {
+            String line;
+            while (true) {
+                try {
+                    line = reader.readLine();
+                    if ((line == null) || line.equalsIgnoreCase("QUIT")) {
+                        System.out.println("[SOCKET] Socket disconnected");
+                        System.exit(0);
+                    } else {
+                        System.out.println(line + "\n\r");
+                        if (line.equals("full")) {
+                            gamestart = true;
+                        } else if (line.equals("1")) {
+                            player = 1;
+                        } else if (line.equals("2")) {
+                            player = 2;
+                        } else if (line.equals("newturn") && playerturn != player) {
+                            newturn = true;
+                            if (playerturn == 1) {
+                                playerturn = 2;
+                            } else if (playerturn == 2) {
+                                playerturn = 1;
+                            }
+                        } else {
+                            becomestring = line;
+                        }
+
+                    }
+                } catch (IOException e) {
+                    System.out.println("[SOCKET] Socket disconnected");
+                    System.exit(0);
+                }
+            }
+        }
+
+    }
 }
+
+
+
+
+
