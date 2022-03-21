@@ -128,6 +128,9 @@ public class main extends ApplicationAdapter {
         }
     }
 
+    /**
+     * Gibt die Werte der angeklickten Figur aus
+     */
     public void drawstats() {
         if (clickf != null) {
             BitmapFont figurstats = new BitmapFont();
@@ -152,6 +155,11 @@ public class main extends ApplicationAdapter {
         figurstats.draw(batch, "Du bist Spieler " + player, 2300, 1750);
     }
 
+    /**
+     * Zeichnet das Feld
+     * @param fields
+     * @param i
+     */
     public void drawfield(Fieldparts fields, int i) {
         if (playerturn == 1) {
             batch.draw(new Texture("Spieler1.png"), 2300, 0);
@@ -208,6 +216,9 @@ public class main extends ApplicationAdapter {
         }
     }
 
+    /**
+     * entschlüsselt die Übertragendaten um daraus figuren zu machen
+     */
     public void getsend() {
 
         String send = becomestring;
@@ -225,6 +236,15 @@ public class main extends ApplicationAdapter {
         newturn = false;
     }
 
+    /**Erzeugt eine Figur aus den Übertragenen Daten
+     *
+     * @param check
+     * @param playersend
+     * @param xsend
+     * @param ysend
+     * @param livesend
+     * @param figuressend
+     */
     public void getrightfigure(String check, int playersend, int xsend, int ysend, int livesend, ArrayList<Figures> figuressend) {
         if (check.equals("Bauer")) {
             figuressend.add(new Bauer(playersend, xsend, ysend, livesend));
@@ -255,6 +275,11 @@ public class main extends ApplicationAdapter {
         }
     }
 
+    /**
+     * Malt die Figur auf das Spielfeld
+     * @param fields
+     * @param figur
+     */
     public void drawfigures(Fieldparts fields, Figures figur) {
         if (fields.X == figur.getX() && fields.Y == figur.getY()) {
             if (figur instanceof Castle) {
@@ -269,6 +294,12 @@ public class main extends ApplicationAdapter {
         }
     }
 
+    /**
+     * Überprüft welche Figur an der jeweiligen Position des clickes ist und wählt diese aus
+     * @param fields
+     * @param j
+     * @param figur
+     */
     public void clickfigures(Fieldparts fields, int j, Figures figur) {
         boolean reset = true;
         if (figur.getX() == clickx && figur.getY() == clicky && fields.X == clickx && fields.Y == clicky && bewegenmalen == null) {
@@ -296,6 +327,12 @@ public class main extends ApplicationAdapter {
         }
     }
 
+
+    /**Erzeugt eine neue Figur in der Buildphase
+     *
+     * @param j
+     * @return
+     */
     public boolean buildfigures(int j) {
         if (buildfigure == 0) {
             if (playerturn == 1 && j <= 39 && j != 6 && j != 7 && j != 8) {
@@ -397,6 +434,11 @@ public class main extends ApplicationAdapter {
         return false;
     }
 
+    /**Setzt die Figur an die Position des Rechtsklicks
+     *
+     * @param fields
+     * @param i
+     */
     public void movefigur(Fieldparts fields, int i) {
         boolean moveble = true;
         if (fields.X == clickrx && fields.Y == clickry && bewegenmalen != null && clickf.getPlayer() == playerturn) {
@@ -418,6 +460,11 @@ public class main extends ApplicationAdapter {
         }
     }
 
+    /**
+     * Greift figur an und nimmt ihre posiotion ein und schibt sie ein feld richtung ihrer Burg
+     * @param fields
+     * @param i
+     */
     public void attackfigure(Fieldparts fields, int i) {
         boolean attackeble = false;
         Figures attacked = null;
@@ -456,6 +503,9 @@ public class main extends ApplicationAdapter {
         }
     }
 
+    /**
+     * beendet die Bauphase
+     */
     public void buildphase() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || turnend) {
             if (playerturn == 1) {
@@ -473,6 +523,9 @@ public class main extends ApplicationAdapter {
         }
     }
 
+    /**
+     * beendet eine Runde
+     */
     public void gamephase() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             if (playerturn == 1) {
@@ -489,6 +542,9 @@ public class main extends ApplicationAdapter {
 
     }
 
+    /**
+     * setzt alle werte auf null
+     */
     public void resetclick() {
         bewegenmalen = null;
         attackmalen = null;
@@ -499,6 +555,9 @@ public class main extends ApplicationAdapter {
         clickf = null;
     }
 
+    /**Erzeugt werte für den rechten und linken Mausklick
+     *
+     */
     public void clickhandler() {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             clicky = click.clicksx();
@@ -510,6 +569,9 @@ public class main extends ApplicationAdapter {
         }
     }
 
+    /**
+     * Sendet einen String mit allen Figuren an den server
+     */
     public void send() {
         sendstring = "";
         for (Figures sendfigures : figures) {
@@ -519,6 +581,9 @@ public class main extends ApplicationAdapter {
         t1.start();
     }
 
+    /**
+     * Wird aufgerufen um zu prüfen ob eine Burg zerstört wurde und somit das Spiel beendet wird
+     */
     public void end() {
         Texture win;
         if (figures != null) {
