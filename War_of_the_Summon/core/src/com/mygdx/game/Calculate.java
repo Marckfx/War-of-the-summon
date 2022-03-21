@@ -7,6 +7,14 @@ import java.util.ArrayList;
 public class Calculate {
     int[] bewegen;
 
+    /**Berechnet die Felder auf denen man sich bewegen kann
+     *
+     * @param x
+     * @param y
+     * @param i
+     * @param figur
+     * @return
+     */
     public int[] calculatmove(int x, int y, int i, Figures figur) {
 
         int l = 0;
@@ -94,6 +102,14 @@ public class Calculate {
 
     }
 
+    /**
+     * Berechnet die Felder auf denen man angreifen kann ohne bewegung zu haben
+     * @param figure
+     * @param i
+     * @param x
+     * @param y
+     * @return
+     */
     public int[] attackwithoutmove(Figures figure, int i, int x, int y) {
         int l = 0;
         int k = 0;
@@ -158,7 +174,14 @@ public class Calculate {
         return null;
     }
 
-
+    /**
+     * Berechnet die Felder auf denen man angreifen kann wenn man noch bewegung hat
+     * @param figure
+     * @param i
+     * @param x
+     * @param y
+     * @return
+     */
     public int[] attackwithmove(Figures figure, int i, int x, int y) {
         int l = 0;
         int k = 0;
