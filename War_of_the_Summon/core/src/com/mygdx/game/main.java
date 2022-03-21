@@ -10,9 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import figures.Bauer;
-import figures.Castle;
-import figures.Figures;
+import figures.*;
 
 import java.io.*;
 import java.net.*;
@@ -21,6 +19,7 @@ import java.util.ArrayList;
 
 public class main extends ApplicationAdapter {
     SpriteBatch batch;
+    Maxlive maxlive = new Maxlive();
     Field field = new Field();
     Click click = new Click();
     Buildbuttons buildbuttons = new Buildbuttons();
@@ -57,11 +56,11 @@ public class main extends ApplicationAdapter {
         batch = new SpriteBatch();
         field.generatField();
         buildbuttons.Buildbutton();
-        castle = new Castle(1, 0, 5, 1);
+        castle = new Castle(1, 0, 5, 15);
         figures.add(castle);
-        castle = new Castle(1, 0, 6, 0);
+        castle = new Castle(1, 0, 6, 15);
         figures.add(castle);
-        castle = new Castle(1, 0, 7, 0);
+        castle = new Castle(1, 0, 7, 15);
         figures.add(castle);
         castle = new Castle(2, 12, 5, 15);
         figures.add(castle);
@@ -75,7 +74,7 @@ public class main extends ApplicationAdapter {
     public void render() {
         ScreenUtils.clear(0, 0, 0, 1);
         batch.begin();
-        if (gamestart&&!player1win&&!player2win) {
+        if (gamestart && !player1win && !player2win) {
             if (newturn) {
                 getsend();
             }
@@ -103,6 +102,9 @@ public class main extends ApplicationAdapter {
             }
             drawstats();
             deletdeadfigurs();
+        }else if(!gamestart && !player1win && !player2win){
+            BitmapFont figurstats = new BitmapFont();
+            figurstats.draw(batch, "Warte auf Spieler", 1500, 1000);
         }
         end();
         batch.end();
@@ -111,16 +113,15 @@ public class main extends ApplicationAdapter {
     @Override
     public void dispose() {
         batch.dispose();
-
     }
 
     public void deletdeadfigurs() {
         Figures deletme = null;
         for (Figures dead : figures) {
-            if(!(dead instanceof Castle))
-            if (dead.getLive() <= 0) {
-                deletme = dead;
-            }
+            if (!(dead instanceof Castle))
+                if (dead.getLive() <= 0) {
+                    deletme = dead;
+                }
         }
         if (deletme != null) {
             figures.remove(deletme);
@@ -168,7 +169,7 @@ public class main extends ApplicationAdapter {
             for (int j = 0; j < buildbuttons.getButton1().size(); j++) {
                 Button button1 = buildbuttons.getButton1().get(j);
                 Button button2 = buildbuttons.getButton2().get(j);
-                if (clickx == button2.getX() && clicky == button2.getY() || clickx == button1.getX() && clicky == button1.getY() && buildfigure < 0) {
+                if ((clickx == button2.getX() && clicky == button2.getY()) || (clickx == button1.getX() && clicky == button1.getY())) {
                     batch.draw(button1.getTextureclick(), button1.getXpix(), button1.getYpix());
                     batch.draw(button2.getTextureclick2(), button2.getXpix(), button2.getYpix());
                     buildfigure = j;
@@ -214,21 +215,44 @@ public class main extends ApplicationAdapter {
         ArrayList<Figures> figuressend = new ArrayList<>();
         for (String figurestring : resultfigure) {
             String[] resultfigurestats = figurestring.split("#");
-            Figures figuresend;
             int playersend = Integer.parseInt(resultfigurestats[1]);
             int livesend = Integer.parseInt(resultfigurestats[2]);
             int xsend = Integer.parseInt(resultfigurestats[3]);
             int ysend = Integer.parseInt(resultfigurestats[4]);
-            if (resultfigurestats[0].equals("Bauer")) {
-                figuresend = new Bauer(playersend, xsend, ysend, livesend);
-                figuressend.add(figuresend);
-            } else if (resultfigurestats[0].equals("Castle")) {
-                figuresend = new Castle(playersend, xsend, ysend, livesend);
-                figuressend.add(figuresend);
-            }
+            getrightfigure(resultfigurestats[0], playersend, xsend, ysend, livesend,figuressend);
         }
         figures = figuressend;
         newturn = false;
+    }
+
+    public void getrightfigure(String check, int playersend, int xsend, int ysend, int livesend, ArrayList<Figures> figuressend) {
+        if (check.equals("Bauer")) {
+            figuressend.add(new Bauer(playersend, xsend, ysend, livesend));
+        } else if (check.equals("Castle")) {
+            figuressend.add(new Castle(playersend, xsend, ysend, livesend));
+        } else if (check.equals("Armbrustschuetze")) {
+            figuressend.add(new Armbrustschuetze(playersend, xsend, ysend, livesend));
+        } else if (check.equals("Drache")) {
+            figuressend.add(new Drache(playersend, xsend, ysend, livesend));
+        } else if (check.equals("Katapult")) {
+            figuressend.add(new Katapult(playersend, xsend, ysend, livesend));
+        } else if (check.equals("Oger")) {
+            figuressend.add(new Oger(playersend, xsend, ysend, livesend));
+        } else if (check.equals("Priester")) {
+            figuressend.add(new Priester(playersend, xsend, ysend, livesend));
+        } else if (check.equals("Reiter")) {
+            figuressend.add(new Reiter(playersend, xsend, ysend, livesend));
+        } else if (check.equals("Schildwacht")) {
+            figuressend.add(new Schildwacht(playersend, xsend, ysend, livesend));
+        } else if (check.equals("Turm")) {
+            figuressend.add(new Turm(playersend, xsend, ysend, livesend));
+        } else if (check.equals("Uruk")) {
+            figuressend.add(new Uruk(playersend, xsend, ysend, livesend));
+        } else if (check.equals("Viper")) {
+            figuressend.add(new Viper(playersend, xsend, ysend, livesend));
+        } else if (check.equals("Waechter")) {
+            figuressend.add(new Waechter(playersend, xsend, ysend, livesend));
+        }
     }
 
     public void drawfigures(Fieldparts fields, Figures figur) {
@@ -252,20 +276,11 @@ public class main extends ApplicationAdapter {
             attackmalen = calculate.calculateattack(clickx, clicky, j, figur);
             clickf = figur;
         } else if (buildfigure >= 0 && clickrx == fields.X && clickry == fields.Y) {
-            if (buildfigure == 0) {
-                if (playerturn == 1 && j <= 39 && j != 6 && j != 7 && j != 8) {
-                    buildfigur = new Bauer(playerturn, clickrx, clickry, 3);
-                    buildfigure = -1;
-                    resetclick();
-                    turnend = true;
-                } else if (playerturn == 2 && j > 130 && j != 163 && j != 162 && j != 164) {
-                    buildfigur = new Bauer(playerturn, clickrx, clickry, 3);
-                    buildfigure = -1;
-                    resetclick();
-                    turnend = true;
-                }
+            if (buildfigures(j)) {
+                buildfigure = -1;
+                resetclick();
+                turnend = true;
             }
-
         } else if (clickf != null && clickrx > 0 && clickry > 0) {
             for (int k : attackmalen) {
                 if (k >= 0) {
@@ -279,6 +294,107 @@ public class main extends ApplicationAdapter {
                 resetclick();
             }
         }
+    }
+
+    public boolean buildfigures(int j) {
+        if (buildfigure == 0) {
+            if (playerturn == 1 && j <= 39 && j != 6 && j != 7 && j != 8) {
+                buildfigur = new Bauer(playerturn, clickrx, clickry, maxlive.getMaxlivebauer());
+                return true;
+            } else if (playerturn == 2 && j > 130 && j != 163 && j != 162 && j != 164) {
+                buildfigur = new Bauer(playerturn, clickrx, clickry, maxlive.getMaxlivebauer());
+                return true;
+            }
+        } else if (buildfigure == 1) {
+            if (playerturn == 1 && j <= 39 && j != 6 && j != 7 && j != 8) {
+                buildfigur = new Armbrustschuetze(playerturn, clickrx, clickry, maxlive.getMaxlivearmbrustschuetze());
+                return true;
+            } else if (playerturn == 2 && j > 130 && j != 163 && j != 162 && j != 164) {
+                buildfigur = new Armbrustschuetze(playerturn, clickrx, clickry, maxlive.getMaxlivearmbrustschuetze());
+                return true;
+            }
+        } else if (buildfigure == 2) {
+            if (playerturn == 1 && j <= 39 && j != 6 && j != 7 && j != 8) {
+                buildfigur = new Drache(playerturn, clickrx, clickry, maxlive.getMaxlivedrache());
+                return true;
+            } else if (playerturn == 2 && j > 130 && j != 163 && j != 162 && j != 164) {
+                buildfigur = new Drache(playerturn, clickrx, clickry, maxlive.getMaxlivedrache());
+                return true;
+            }
+        } else if (buildfigure == 3) {
+            if (playerturn == 1 && j <= 39 && j != 6 && j != 7 && j != 8) {
+                buildfigur = new Katapult(playerturn, clickrx, clickry, maxlive.getMaxlivekatapult());
+                return true;
+            } else if (playerturn == 2 && j > 130 && j != 163 && j != 162 && j != 164) {
+                buildfigur = new Katapult(playerturn, clickrx, clickry, maxlive.getMaxlivekatapult());
+                return true;
+            }
+        } else if (buildfigure == 4) {
+            if (playerturn == 1 && j <= 39 && j != 6 && j != 7 && j != 8) {
+                buildfigur = new Oger(playerturn, clickrx, clickry, maxlive.getMaxliveoger());
+                return true;
+            } else if (playerturn == 2 && j > 130 && j != 163 && j != 162 && j != 164) {
+                buildfigur = new Oger(playerturn, clickrx, clickry, maxlive.getMaxliveoger());
+                return true;
+            }
+        } else if (buildfigure == 5) {
+            if (playerturn == 1 && j <= 39 && j != 6 && j != 7 && j != 8) {
+                buildfigur = new Priester(playerturn, clickrx, clickry, maxlive.getMaxlivepriester());
+                return true;
+            } else if (playerturn == 2 && j > 130 && j != 163 && j != 162 && j != 164) {
+                buildfigur = new Priester(playerturn, clickrx, clickry, maxlive.getMaxlivepriester());
+                return true;
+            }
+        } else if (buildfigure == 6) {
+            if (playerturn == 1 && j <= 39 && j != 6 && j != 7 && j != 8) {
+                buildfigur = new Reiter(playerturn, clickrx, clickry, maxlive.getMaxlivereiter());
+                return true;
+            } else if (playerturn == 2 && j > 130 && j != 163 && j != 162 && j != 164) {
+                buildfigur = new Reiter(playerturn, clickrx, clickry, maxlive.getMaxlivereiter());
+                return true;
+            }
+        } else if (buildfigure == 7) {
+            if (playerturn == 1 && j <= 39 && j != 6 && j != 7 && j != 8) {
+                buildfigur = new Schildwacht(playerturn, clickrx, clickry, maxlive.getMaxliveschildwacht());
+                return true;
+            } else if (playerturn == 2 && j > 130 && j != 163 && j != 162 && j != 164) {
+                buildfigur = new Schildwacht(playerturn, clickrx, clickry, maxlive.getMaxliveschildwacht());
+                return true;
+            }
+        } else if (buildfigure == 8) {
+            if (playerturn == 1 && j <= 39 && j != 6 && j != 7 && j != 8) {
+                buildfigur = new Turm(playerturn, clickrx, clickry, maxlive.getMaxliveturm());
+                return true;
+            } else if (playerturn == 2 && j > 130 && j != 163 && j != 162 && j != 164) {
+                buildfigur = new Turm(playerturn, clickrx, clickry, maxlive.getMaxliveturm());
+                return true;
+            }
+        } else if (buildfigure == 9) {
+            if (playerturn == 1 && j <= 39 && j != 6 && j != 7 && j != 8) {
+                buildfigur = new Uruk(playerturn, clickrx, clickry, maxlive.getMaxliveuruk());
+                return true;
+            } else if (playerturn == 2 && j > 130 && j != 163 && j != 162 && j != 164) {
+                buildfigur = new Uruk(playerturn, clickrx, clickry, maxlive.getMaxliveuruk());
+                return true;
+            }
+        } else if (buildfigure == 10) {
+            if (playerturn == 1 && j <= 39 && j != 6 && j != 7 && j != 8) {
+                buildfigur = new Viper(playerturn, clickrx, clickry, maxlive.getMaxliveViper());
+                return true;
+            } else if (playerturn == 2 && j > 130 && j != 163 && j != 162 && j != 164) {
+                buildfigur = new Viper(playerturn, clickrx, clickry, maxlive.getMaxliveViper());
+                return true;
+            }
+        } else if (buildfigure == 11) {
+            if (playerturn == 1 && j <= 39 && j != 6 && j != 7 && j != 8) {
+                buildfigur = new Waechter(playerturn, clickrx, clickry, maxlive.getMaxlivewaechter());
+                return true;
+            } else if (playerturn == 2 && j > 130 && j != 163 && j != 162 && j != 164) {
+                buildfigur = new Waechter(playerturn, clickrx, clickry, maxlive.getMaxlivewaechter());
+                return true;
+            }
+        }
+        return false;
     }
 
     public void movefigur(Fieldparts fields, int i) {
@@ -317,28 +433,22 @@ public class main extends ApplicationAdapter {
                 if (attackeble) {
                     if (attacked instanceof Castle) {
                         if (attacked.getPlayer() == 1) {
-                            player1live -= clickf.getAttack();
                             clickf.setX(attacked.getX() + clickf.getAttackrange());
                         } else {
-                            player2live -= clickf.getAttack();
                             clickf.setX(attacked.getX() - clickf.getAttackrange());
                         }
-                        clickf.setMoved(true);
-                        clickf.setAttacked(true);
                     } else {
                         if (attacked.getPlayer() == 1) {
                             attacked.setX(attacked.getX() - 1);
-                            attacked.setLive(attacked.getLive() - clickf.getAttack());
                         } else {
                             attacked.setX(attacked.getX() + 1);
-                            attacked.setLive(attacked.getLive() - clickf.getAttack());
                         }
                         clickf.setX(clickrx);
                         clickf.setY(clickry);
-                        clickf.setMoved(true);
-                        clickf.setAttacked(true);
-
                     }
+                    attacked.setLive(attacked.getLive() - clickf.getAttack());
+                    clickf.setMoved(true);
+                    clickf.setAttacked(true);
                     resetclick();
                     break;
                 }
@@ -358,7 +468,7 @@ public class main extends ApplicationAdapter {
             resetclick();
             send();
         }
-        if (turnbuild == 2) {
+        if (turnbuild == 10) {
             build = false;
         }
     }
@@ -405,27 +515,28 @@ public class main extends ApplicationAdapter {
         for (Figures sendfigures : figures) {
             sendstring += sendfigures.getName() + "#" + sendfigures.getPlayer() + "#" + sendfigures.getLive() + "#" + sendfigures.getX() + "#" + sendfigures.getY() + "-";
         }
-        System.out.println(sendstring);
         Thread t1 = new Thread(new Client(socket));
         t1.start();
     }
 
     public void end() {
         Texture win;
-        if( figures!=null){
-            player1live=0;
-            player2live=0;
-        for (Figures castlelive:figures) {
-            if(castlelive instanceof Castle){
-                if(castlelive.getPlayer()==1){
+        if (figures != null) {
+            player1live = 0;
+            player2live = 0;
+            for (Figures castlelive : figures) {
+                if (castlelive instanceof Castle) {
+                    if (castlelive.getPlayer() == 1) {
 
-                    player1live+=castlelive.getLive();
-                }else if(castlelive.getPlayer()==2){
+                        player1live += castlelive.getLive();
 
-                    player2live+=castlelive.getLive();
+                    } else if (castlelive.getPlayer() == 2) {
+
+                        player2live += castlelive.getLive();
+                    }
                 }
             }
-        }}
+        }
         if (player1live <= 0) {
             resetclick();
             player2win = true;
@@ -433,6 +544,7 @@ public class main extends ApplicationAdapter {
         } else if (player2live <= 0) {
             resetclick();
             player1win = true;
+
         }
         if (player1win || player2win) {
             figures = null;
@@ -440,9 +552,15 @@ public class main extends ApplicationAdapter {
             if (player2win) {
                 win = new Texture("Player2win.png");
                 batch.draw(win, 1200, 950);
+                sendstring = "win2";
+                Thread t1 = new Thread(new Client(socket));
+                t1.start();
             } else if (player1win) {
                 win = new Texture("Player2win.png");
                 batch.draw(win, 1200, 950);
+                sendstring = "win1";
+                Thread t1 = new Thread(new Client(socket));
+                t1.start();
             }
         }
     }
@@ -506,6 +624,10 @@ public class main extends ApplicationAdapter {
                         System.out.println(line + "\n\r");
                         if (line.equals("full")) {
                             gamestart = true;
+                        } else if (line.equals("win1")) {
+                            player1win = true;
+                        } else if (line.equals("win2")) {
+                            player2win = true;
                         } else if (line.equals("1")) {
                             player = 1;
                         } else if (line.equals("2")) {
