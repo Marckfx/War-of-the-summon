@@ -11,7 +11,11 @@ In dem Spiel versucht man mit 13 Einzigartigen Figuren die gegnerische Festung z
 
 ### Dies ist unsere Grundkarte auf der wir unser Spiel erzeugen
 
+Bauphase
+
 ![Guimockup drawio (1)](https://user-images.githubusercontent.com/85035651/159481243-3836adfc-ece7-4b99-9c87-225eea2e64e3.png)
+
+Spielphase
 
 ![Guimockup drawio (2)](https://user-images.githubusercontent.com/85035651/159481112-475ce721-717d-4603-b270-994d972a8d59.png)
 
