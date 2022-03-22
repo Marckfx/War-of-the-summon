@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
 public class Click {
-    int mousex = 0;
-    int mousey = 0;
+    private int mousex = 0;
+    private int mousey = 0;
     public int clicksx() {
             mousex = Gdx.input.getX()/151;
             return mousex;

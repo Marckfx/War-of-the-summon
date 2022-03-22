@@ -24,31 +24,32 @@ public class main extends ApplicationAdapter {
     Click click = new Click();
     Buildbuttons buildbuttons = new Buildbuttons();
     Calculate calculate = new Calculate();
-    int clickx = -1;
-    int clicky = -1;
-    int clickrx = -1;
-    int clickry = -1;
-    int playerturn = 1;
-    int player1live = 45;
-    int player2live = 45;
-    int buildfigure = -1;
-    int turnbuild = 0;
-    boolean newturn = false;
-    boolean build = true;
-    boolean turnend = false;
-    int[] bewegenmalen = null;
-    int[] attackmalen = null;
-    Figures buildfigur;
-    Figures clickf = null;
-    Castle castle;
-    ArrayList<Figures> figures = new ArrayList<>();
-    boolean player1win = false;
-    boolean player2win = false;
-    boolean gamestart = false;
-    Socket socket;
-    int player = 0;
-    String sendstring;
-    String becomestring;
+    private int clickx = -1;
+    private int clicky = -1;
+    private int clickrx = -1;
+    private int clickry = -1;
+    private int playerturn = 1;
+    private int player1live = 45;
+    private int player2live = 45;
+    private int buildfigure = -1;
+    private  int turnbuild = 0;
+    private  int player = 0;
+    private  boolean newturn = false;
+    private  boolean build = true;
+    private  boolean turnend = false;
+    private  boolean player1win = false;
+    private  boolean player2win = false;
+    private  boolean gamestart = false;
+    private int[] bewegenmalen = null;
+    private  int[] attackmalen = null;
+    private  Figures buildfigur;
+    private  Figures clickf = null;
+    private  Castle castle;
+    private  ArrayList<Figures> figures = new ArrayList<>();
+    private  Socket socket;
+    private String sendstring;
+    private String becomestring;
+    Texture loading;
 
     @Override
     public void create() {
@@ -103,8 +104,9 @@ public class main extends ApplicationAdapter {
             drawstats();
             deletdeadfigurs();
         }else if(!gamestart && !player1win && !player2win){
-            BitmapFont figurstats = new BitmapFont();
-            figurstats.draw(batch, "Warte auf Spieler", 1500, 1000);
+
+           loading=new Texture("Loading.png");
+            batch.draw(loading, 1000, 900);
         }
         end();
         batch.end();
@@ -115,6 +117,9 @@ public class main extends ApplicationAdapter {
         batch.dispose();
     }
 
+    /**Entfernt besiegte Figuren vom feld
+     *
+     */
     public void deletdeadfigurs() {
         Figures deletme = null;
         for (Figures dead : figures) {
@@ -211,6 +216,18 @@ public class main extends ApplicationAdapter {
                             }
                         }
                     }
+                }
+            }
+            for (int j = 0; j < buildbuttons.getButton1().size(); j++) {
+                Button button1 = buildbuttons.getButton1().get(j);
+                Button button2 = buildbuttons.getButton2().get(j);
+                if ((clickx == button2.getX() && clicky == button2.getY()) || (clickx == button1.getX() && clicky == button1.getY())) {
+                    batch.draw(button1.getTextureclick(), button1.getXpix(), button1.getYpix());
+                    batch.draw(button2.getTextureclick2(), button2.getXpix(), button2.getYpix());
+                    buildfigure = j;
+                } else {
+                    batch.draw(button1.getTexture(), button1.getXpix(), button1.getYpix());
+                    batch.draw(button2.getTexture2(), button2.getXpix(), button2.getYpix());
                 }
             }
         }
@@ -326,7 +343,6 @@ public class main extends ApplicationAdapter {
             }
         }
     }
-
 
     /**Erzeugt eine neue Figur in der Buildphase
      *
@@ -629,7 +645,6 @@ public class main extends ApplicationAdapter {
             }
         }
     }
-
 
     public void connection() {
         try {
