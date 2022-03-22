@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 
 public class Field {
-    ArrayList<Fieldparts> fieldparts= new ArrayList<Fieldparts>();
+    ArrayList<Fieldparts> fieldparts= new ArrayList<>();
     public void generatField(){
         fieldparts.add(new Fieldparts(0,0,0,0));
         for (int i = 0; i < 13; i++) {

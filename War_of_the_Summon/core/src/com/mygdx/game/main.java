@@ -5,18 +5,14 @@ import button.Button;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import figures.*;
-
 import java.io.*;
 import java.net.*;
-
 import java.util.ArrayList;
 
 public class main extends ApplicationAdapter {
@@ -47,7 +43,6 @@ public class main extends ApplicationAdapter {
     private int[] attackmalen = null;
     private Figures buildfigur;
     private Figures clickf = null;
-    private Castle castle;
     private ArrayList<Figures> figures = new ArrayList<>();
     private Socket socket;
     private String sendstring;
@@ -62,7 +57,7 @@ public class main extends ApplicationAdapter {
         batch = new SpriteBatch();
         field.generatField();
         buildbuttons.Buildbutton();
-        castle = new Castle(1, 0, 5, 15);
+        Castle castle = new Castle(1, 0, 5, 15);
         figures.add(castle);
         castle = new Castle(1, 0, 6, 15);
         figures.add(castle);
@@ -118,8 +113,8 @@ public class main extends ApplicationAdapter {
         if (player2win || player1win) {
             restartcounter--;
             BitmapFont figurstats = new BitmapFont();
-            figurstats.draw(batch, "Noch Sekunden bis das Spiel sich Schließt oder drücke Leertaste" +Math.round(restartcounter/60) , 550, 350);
-            if (restartcounter <= 0|| Gdx.input.isKeyJustPressed(Input.Keys.SPACE) ) {
+            figurstats.draw(batch, "Noch Sekunden bis das Spiel sich Schließt oder drücke Leertaste" + Math.round(restartcounter / 60f), 550, 350);
+            if (restartcounter <= 0 || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 System.exit(0);
             }
         }
@@ -132,7 +127,7 @@ public class main extends ApplicationAdapter {
     }
 
     /**
-     * Entfernt besiegte Figuren vom feld
+     * Entfernt besiegte Figuren vom Feld
      */
     public void deletdeadfigurs() {
         Figures deletme = null;
@@ -159,18 +154,18 @@ public class main extends ApplicationAdapter {
                 figurstats.setColor(Color.RED);
             }
             figurstats.draw(batch, "Name: " + clickf.getName(), 1794, 1017);
-            figurstats.draw(batch, "Attack: " + clickf.getAttack(), 1794, 997);
-            figurstats.draw(batch, "Move: " + clickf.getMove(), 1794, 977);
-            figurstats.draw(batch, "Attackrange: " + clickf.getAttackrange(), 1794, 957);
+            figurstats.draw(batch, "Attacke: " + clickf.getAttack(), 1794, 997);
+            figurstats.draw(batch, "Bewegung: " + clickf.getMove(), 1794, 977);
+            figurstats.draw(batch, "Angriffsreichweite: " + clickf.getAttackrange(), 1794, 957);
             if (clickf instanceof Castle) {
                 if (clickf.getPlayer() == 1) {
-                    figurstats.draw(batch, "Live: " + player1live, 1794, 937);
+                    figurstats.draw(batch, "Leben: " + player1live, 1794, 937);
                 } else {
-                    figurstats.draw(batch, "Live: " + player2live, 1794, 937);
+                    figurstats.draw(batch, "Leben: " + player2live, 1794, 937);
                 }
 
             } else {
-                figurstats.draw(batch, "Live: " + clickf.getLive(), 1794, 937);
+                figurstats.draw(batch, "Leben: " + clickf.getLive(), 1794, 937);
             }
         }
 
@@ -181,8 +176,8 @@ public class main extends ApplicationAdapter {
     /**
      * Zeichnet das Feld
      *
-     * @param fields
-     * @param i
+     * @param fields Gibt das Feld an das geprüft wir
+     * @param i Gibt die zahl an wo das feld im array liegt
      */
     public void drawfield(Fieldparts fields, int i) {
         if (playerturn == 1) {
@@ -253,7 +248,7 @@ public class main extends ApplicationAdapter {
     }
 
     /**
-     * entschlüsselt die Übertragendaten um daraus figuren zu machen
+     * entschlüsselt die übertragenden Daten, um daraus Figuren zu machen
      */
     public void getsend() {
 
@@ -273,50 +268,64 @@ public class main extends ApplicationAdapter {
     }
 
     /**
-     * Erzeugt eine Figur aus den Übertragenen Daten
+     * Erzeugt eine Figur aus den übertragenen Daten
      *
-     * @param check
-     * @param playersend
-     * @param xsend
-     * @param ysend
-     * @param livesend
-     * @param figuressend
+     * @param check Gibt an welchen Namen die Figur hat
+     * @param playersend Gibt an welchem Spieler die Figur gehört
+     * @param xsend Gibt die X position der Figur an
+     * @param ysend Gibt die Y position der Figur an
+     * @param livesend Gibt das aktuelle Leben der Figur an
+     * @param figuressend Ist das array wo alle Figuren gespeichert werden
      */
     public void getrightfigure(String check, int playersend, int xsend, int ysend, int livesend, ArrayList<Figures> figuressend) {
-        if (check.equals("Bauer")) {
-            figuressend.add(new Bauer(playersend, xsend, ysend, livesend));
-        } else if (check.equals("Castle")) {
-            figuressend.add(new Castle(playersend, xsend, ysend, livesend));
-        } else if (check.equals("Armbrustschuetze")) {
-            figuressend.add(new Armbrustschuetze(playersend, xsend, ysend, livesend));
-        } else if (check.equals("Drache")) {
-            figuressend.add(new Drache(playersend, xsend, ysend, livesend));
-        } else if (check.equals("Katapult")) {
-            figuressend.add(new Katapult(playersend, xsend, ysend, livesend));
-        } else if (check.equals("Oger")) {
-            figuressend.add(new Oger(playersend, xsend, ysend, livesend));
-        } else if (check.equals("Priester")) {
-            figuressend.add(new Priester(playersend, xsend, ysend, livesend));
-        } else if (check.equals("Reiter")) {
-            figuressend.add(new Reiter(playersend, xsend, ysend, livesend));
-        } else if (check.equals("Schildwacht")) {
-            figuressend.add(new Schildwacht(playersend, xsend, ysend, livesend));
-        } else if (check.equals("Turm")) {
-            figuressend.add(new Turm(playersend, xsend, ysend, livesend));
-        } else if (check.equals("Uruk")) {
-            figuressend.add(new Uruk(playersend, xsend, ysend, livesend));
-        } else if (check.equals("Viper")) {
-            figuressend.add(new Viper(playersend, xsend, ysend, livesend));
-        } else if (check.equals("Waechter")) {
-            figuressend.add(new Waechter(playersend, xsend, ysend, livesend));
+        switch (check) {
+            case "Bauer":
+                figuressend.add(new Bauer(playersend, xsend, ysend, livesend));
+                break;
+            case "Castle":
+                figuressend.add(new Castle(playersend, xsend, ysend, livesend));
+                break;
+            case "Armbrustschuetze":
+                figuressend.add(new Armbrustschuetze(playersend, xsend, ysend, livesend));
+                break;
+            case "Drache":
+                figuressend.add(new Drache(playersend, xsend, ysend, livesend));
+                break;
+            case "Katapult":
+                figuressend.add(new Katapult(playersend, xsend, ysend, livesend));
+                break;
+            case "Oger":
+                figuressend.add(new Oger(playersend, xsend, ysend, livesend));
+                break;
+            case "Priester":
+                figuressend.add(new Priester(playersend, xsend, ysend, livesend));
+                break;
+            case "Reiter":
+                figuressend.add(new Reiter(playersend, xsend, ysend, livesend));
+                break;
+            case "Schildwacht":
+                figuressend.add(new Schildwacht(playersend, xsend, ysend, livesend));
+                break;
+            case "Turm":
+                figuressend.add(new Turm(playersend, xsend, ysend, livesend));
+                break;
+            case "Uruk":
+                figuressend.add(new Uruk(playersend, xsend, ysend, livesend));
+                break;
+            case "Viper":
+                figuressend.add(new Viper(playersend, xsend, ysend, livesend));
+                break;
+            case "Waechter":
+                figuressend.add(new Waechter(playersend, xsend, ysend, livesend));
+                break;
         }
     }
 
     /**
      * Malt die Figur auf das Spielfeld
      *
-     * @param fields
-     * @param figur
+     * @param fields Gibt das Feld die geprüft wir an
+     * @param figur Gibt die Figur die geprüft wir an
      */
     public void drawfigures(Fieldparts fields, Figures figur) {
         if (fields.X == figur.getX() && fields.Y == figur.getY()) {
@@ -333,11 +342,10 @@ public class main extends ApplicationAdapter {
     }
 
     /**
-     * Überprüft welche Figur an der jeweiligen Position des clickes ist und wählt diese aus
-     *
-     * @param fields
-     * @param j
-     * @param figur
+     * Überprüft welche Figur an der jeweiligen Position des Klicks ist und wählt diese aus
+     * @param fields Gibt das Feld die geprüft wir an
+     * @param j Gibt die zahl an wo das feld im array liegt
+     * @param figur Gibt die Figur die geprüft wir an
      */
     public void clickfigures(Fieldparts fields, int j, Figures figur) {
         boolean reset = true;
@@ -367,10 +375,10 @@ public class main extends ApplicationAdapter {
     }
 
     /**
-     * Erzeugt eine neue Figur in der Buildphase
+     * Erzeugt eine neue Figur in der Bauphase
      *
-     * @param j
-     * @return
+     * @param j Gibt die nummer des Buttons an der betätigt wurde
+     * @return true, wenn eine Figur ausgewählt wurde
      */
     public boolean buildfigures(int j) {
         if (buildfigure == 0) {
@@ -476,8 +484,8 @@ public class main extends ApplicationAdapter {
     /**
      * Setzt die Figur an die Position des Rechtsklicks
      *
-     * @param fields
-     * @param i
+     * @param fields Gibt das Feld an das geprüft wir
+     * @param i Gibt die zahl an wo das feld im array liegt
      */
     public void movefigur(Fieldparts fields, int i) {
         boolean moveble = true;
@@ -503,8 +511,8 @@ public class main extends ApplicationAdapter {
     /**
      * Greift figur an und nimmt ihre posiotion ein und schibt sie ein feld richtung ihrer Burg
      *
-     * @param fields
-     * @param i
+     * @param fields Gibt das Feld an das geprüft wir
+     * @param i Gibt die zahl an wo das feld im array liegt
      */
     public void attackfigure(Fieldparts fields, int i) {
         boolean attackeble = false;
@@ -634,9 +642,7 @@ public class main extends ApplicationAdapter {
                 if (castlelive instanceof Castle) {
                     if (castlelive.getPlayer() == 1) {
                         player1live += castlelive.getLive();
-
                     } else if (castlelive.getPlayer() == 2) {
-
                         player2live += castlelive.getLive();
                     }
                 }
@@ -659,7 +665,6 @@ public class main extends ApplicationAdapter {
                 batch.draw(win, 550, 400);
                 sendstring = "win2";
                 if (!sendpoints) {
-
 
                     sendpoints = true;
                 }
@@ -687,7 +692,6 @@ public class main extends ApplicationAdapter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     class Client extends Thread {
@@ -695,7 +699,6 @@ public class main extends ApplicationAdapter {
         PrintWriter writer;
 
         public Client(Socket socket) {
-
             try {
                 writer = new PrintWriter(socket.getOutputStream(), true);
             } catch (IOException e) {

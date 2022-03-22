@@ -70,16 +70,6 @@ public class Textures {
     Texture waechter1click = new Texture("Waechter1click.png");
     Texture waechter2click = new Texture("Waechter2click.png");
 
-    Texture loading= new Texture("Loading.png");
-
-    public Textures() {
-
-    }
-
-    public Texture getLoading() {
-        return loading;
-    }
-
     public Texture getEmpty() {
         return empty;
     }

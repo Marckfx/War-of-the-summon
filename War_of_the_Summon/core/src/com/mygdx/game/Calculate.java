@@ -2,18 +2,15 @@ package com.mygdx.game;
 
 import figures.Figures;
 
-import java.util.ArrayList;
-
 public class Calculate {
-    private int[] bewegen;
 
     /**Berechnet die Felder auf denen man sich bewegen kann
      *
-     * @param x
-     * @param y
-     * @param i
-     * @param figur
-     * @return
+     * @param figur Gibt die Figur an die zu Prüfen ist
+     * @param i Gibt die Position des zu prüfenden Feldes aus der Arraylist an
+     * @param x Gibt den X wert des Klickes an
+     * @param y Gibt den Y wert des Klickes an
+     * @return Gibt die Felder zurück, auf denen sich bewegt werden kann
      */
     public int[] calculatmove(int x, int y, int i, Figures figur) {
 
@@ -27,7 +24,7 @@ public class Calculate {
                 int[] h = new int[l];
                 if (figur.getX() == x && figur.getY() == y) {
                     int b = 0;
-                    int o = i;
+                    int o;
                     int z = 0;
                     for (int m = 0; m < 13; m++) {
                         if (i > 13 * m) {
@@ -76,7 +73,6 @@ public class Calculate {
                         }
                         b++;
                     }
-                    bewegen = h;
                     return h;
                 }
             }
@@ -87,6 +83,14 @@ public class Calculate {
 
     }
 
+    /**
+     *
+     * @param figur Gibt die Figur an die zu Prüfen ist
+     * @param i Gibt die Position des zu prüfenden Feldes aus der Arraylist an
+     * @param x Gibt den X wert des Klickes an
+     * @param y Gibt den Y wert des Klickes an
+     * @return Gibt die Felder zurück auf denen angegriffen werden kann
+     */
     public int[] calculateattack(int x, int y, int i, Figures figur) {
 
 
@@ -103,12 +107,12 @@ public class Calculate {
     }
 
     /**
-     * Berechnet die Felder auf denen man angreifen kann ohne bewegung zu haben
-     * @param figure
-     * @param i
-     * @param x
-     * @param y
-     * @return
+     * Berechnet die Felder, auf denen man angreifen kann, ohne bewegung zu haben
+     * @param figure Gibt die Figur an die zu Prüfen ist
+     * @param i Gibt die Position des zu prüfenden Feldes aus der Arraylist an
+     * @param x Gibt den X wert des Klickes an
+     * @param y Gibt den Y wert des Klickes an
+     * @return Gibt die Felder zurück auf denen angegriffen werden kann
      */
     public int[] attackwithoutmove(Figures figure, int i, int x, int y) {
         int l = 0;
@@ -119,7 +123,7 @@ public class Calculate {
         int[] h = new int[l];
         if (figure.getX() == x && figure.getY() == y) {
             int b = 0;
-            int o = i;
+            int o;
             int z = 0;
             for (int m = 0; m < 13; m++) {
                 if (i > 13 * m) {
@@ -175,12 +179,12 @@ public class Calculate {
     }
 
     /**
-     * Berechnet die Felder auf denen man angreifen kann wenn man noch bewegung hat
-     * @param figure
-     * @param i
-     * @param x
-     * @param y
-     * @return
+     * Berechnet die Felder, auf denen man angreifen kann, wenn man noch bewegung hat
+     * @param figure Gibt die Figur an die zu Prüfen ist
+     * @param i Gibt die Position des zu prüfenden Feldes aus der Arraylist an
+     * @param x Gibt den X wert des Klickes an
+     * @param y Gibt den Y wert des Klickes an
+     * @return Gibt die Felder zurück auf denen angegriffen werden kann
      */
     public int[] attackwithmove(Figures figure, int i, int x, int y) {
         int l = 0;
@@ -191,7 +195,7 @@ public class Calculate {
         int[] h = new int[l];
         if (figure.getX() == x && figure.getY() == y) {
             int b = 0;
-            int o = i;
+            int o ;
             int z = 0;
             for (int m = 0; m < 13; m++) {
                 if (i > 13 * m) {
