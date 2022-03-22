@@ -719,7 +719,14 @@ public class main extends ApplicationAdapter {
                             player = 1;
                         } else if (line.equals("2")) {
                             player = 2;
-                        } else if (line.equals("newturn") && playerturn != player) {
+                        }else if (line.equals("[Server] A player left the lobby")) {
+                            if (player==1){
+                                player1win=true;
+                            }else {
+                                player2win=true;
+                            }
+                        }
+                        else if (line.equals("newturn") && playerturn != player) {
                             newturn = true;
                             if (playerturn == 1) {
                                 playerturn = 2;
