@@ -40,7 +40,7 @@ public class main extends ApplicationAdapter {
     private  boolean build = true;
     private  boolean turnend = false;
     private  boolean player1win = false;
-    private  boolean player2win = false;
+    private  boolean player2win = true;
     private  boolean gamestart = false;
     private int[] bewegenmalen = null;
     private  int[] attackmalen = null;
@@ -107,7 +107,7 @@ public class main extends ApplicationAdapter {
             deletdeadfigurs();
         }else if(!gamestart && !player1win && !player2win){
             loading=new Texture("Loading.png");
-            batch.draw(loading, 1000, 900);
+            batch.draw(loading, 700, 900);
         }
 
         end();
@@ -639,13 +639,13 @@ public class main extends ApplicationAdapter {
             field = null;
             if (player2win) {
                 win = new Texture("Player2win.png");
-                batch.draw(win, 1200, 950);
+                batch.draw(win, 550, 400);
                 sendstring = "win2";
                 Thread t1 = new Thread(new Client(socket));
                 t1.start();
             } else if (player1win) {
                 win = new Texture("Player2win.png");
-                batch.draw(win, 1200, 950);
+                batch.draw(win, 550, 400);
                 sendstring = "win1";
                 Thread t1 = new Thread(new Client(socket));
                 t1.start();
