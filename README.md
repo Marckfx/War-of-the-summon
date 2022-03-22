@@ -200,4 +200,39 @@ Rechts die runden Felder ist der Auswahlbereich dort wählt man mit links Klick 
 
 und mit rechts Klick platziert man die Figur die Figur dann 
 
+![Figur plaziert](https://user-images.githubusercontent.com/85035651/159494889-d16ce33d-8a68-4973-b4f4-fe09f6ecd18e.jpg)
 
+dann wartet man das der Gegner seine Figur Platziert
+
+![gegnerzug](https://user-images.githubusercontent.com/85035651/159495081-69041a1a-9c59-46a6-a6b6-b97f386cafc0.jpg)
+
+Dies wiederholt sich bis beide bis zu 10 Figuren auf dem Feld haben
+
+![Figuren aufgestellt](https://user-images.githubusercontent.com/85035651/159495198-83b32cab-5e7a-4dc9-97c0-2ed127add386.jpg)
+
+Dann wählt man eine figur aus und die möglichen aktionen werden angezeigt
+-Auf blauen Feldern kann man sich bewegen 
+-Auf roten Feldern kann man angreifen 
+
+![Bewegen und angreifen](https://user-images.githubusercontent.com/85035651/159495534-00709d00-117f-4efc-8f31-29f587f960c5.jpg)
+
+Mit rechtsklick werden diese aktionen Ausgeführt.
+
+![Figur bewegt](https://user-images.githubusercontent.com/85035651/159495663-548fa38b-8850-47dc-a80a-cfef2814c8a8.jpg)
+
+so und nun zum Kampf wir haben hier 2 reiter und spieler 2 ist am zug
+
+![kampf 1](https://user-images.githubusercontent.com/85035651/159497134-31d17f17-a9bc-4b0c-afca-a19f4fd02aad.jpg)
+
+Spieler 2 klickt auf seine figur und wählt diese aus und sieht das der reiter von spieler 1 in reichweite ist um anzugreifen
+
+![Kampf2](https://user-images.githubusercontent.com/85035651/159497398-0d6e0b3c-dc84-470c-a894-2f151720336a.jpg)
+
+Mit rechtsklick auf die gegnerische Figur bestätigt er den angriff der reiter bewegt sich auf die position und schiebt den gegnerischen reiter richtung der gegnerischen burg
+
+![Kampf3](https://user-images.githubusercontent.com/85035651/159497664-9715d62b-076c-435f-b49d-a8be0758d0a6.jpg)
+
+Wenn das Leben einer figur auf null fällt ist sie besiegt und verschwindet 
+wenn das Leben der Burg auf null fällt ist das Spiel vorbei und der Gewinner ist der dessen Burg noch steht 
+
+Das ist der ablauf von  War of the Summon viel spaß beim Spielen 
