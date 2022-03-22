@@ -5,7 +5,9 @@ import button.Button;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -104,10 +106,10 @@ public class main extends ApplicationAdapter {
             drawstats();
             deletdeadfigurs();
         }else if(!gamestart && !player1win && !player2win){
-
-           loading=new Texture("Loading.png");
+            loading=new Texture("Loading.png");
             batch.draw(loading, 1000, 900);
         }
+
         end();
         batch.end();
     }
@@ -144,20 +146,25 @@ public class main extends ApplicationAdapter {
             } else {
                 figurstats.setColor(Color.RED);
             }
-            figurstats.draw(batch, "Name: " + clickf.getName(), 2300, 1850);
-            figurstats.draw(batch, "Attack: " + clickf.getAttack(), 2300, 1830);
-            figurstats.draw(batch, "Move: " + clickf.getMove(), 2300, 1810);
-            figurstats.draw(batch, "Attackrange: " + clickf.getAttackrange(), 2300, 1790);
-            figurstats.draw(batch, "Live: " + clickf.getLive(), 2300, 1770);
+            figurstats.draw(batch, "Name: " + clickf.getName(), 1794, 1017);
+            figurstats.draw(batch, "Attack: " + clickf.getAttack(), 1794, 997);
+            figurstats.draw(batch, "Move: " + clickf.getMove(), 1794, 977);
+            figurstats.draw(batch, "Attackrange: " + clickf.getAttackrange(), 1794, 957);
+            if(clickf instanceof Castle){
+                if (clickf.getPlayer() == 1) {
+                    figurstats.draw(batch, "Live: " + player1live, 1794, 937);
+                } else {
+                    figurstats.draw(batch, "Live: " + player2live, 1794, 937);
+                }
 
+            }
+            else {
+                figurstats.draw(batch, "Live: " + clickf.getLive(), 1794, 937);
+            }
         }
-        if (clickrx > 0 && clickry > 0) {
-            BitmapFont figurstats = new BitmapFont();
-            figurstats.draw(batch, "clickrx: " + clickrx, 2300, 200);
-            figurstats.draw(batch, "clickry: " + clickry, 2300, 220);
-        }
+
         BitmapFont figurstats = new BitmapFont();
-        figurstats.draw(batch, "Du bist Spieler " + player, 2300, 1750);
+        figurstats.draw(batch, "Du bist Spieler " + player, 1794, 917);
     }
 
     /**
@@ -167,28 +174,28 @@ public class main extends ApplicationAdapter {
      */
     public void drawfield(Fieldparts fields, int i) {
         if (playerturn == 1) {
-            batch.draw(new Texture("Spieler1.png"), 2300, 0);
+            batch.draw(new Texture("Spieler1.png"), 1794, 0,55,55);
         } else {
-            batch.draw(new Texture("Spieler2.png"), 2300, 0);
+            batch.draw(new Texture("Spieler2.png"), 1794, 0,55,55);
         }
         if (build) {
             if (i == 6 || i == 7 || i == 8 || i == 163 || i == 162 || i == 164) {
 
             } else if (i <= 13 * 3) {
-                batch.draw(fields.getTextures().get(4), fields.Xpix, fields.Ypix);
+                batch.draw(fields.getTextures().get(4), fields.Xpix, fields.Ypix,81,81);
             } else if (i >= 13 * 10 + 1) {
-                batch.draw(fields.getTextures().get(5), fields.Xpix, fields.Ypix);
+                batch.draw(fields.getTextures().get(5), fields.Xpix, fields.Ypix,81,81);
             }
             for (int j = 0; j < buildbuttons.getButton1().size(); j++) {
                 Button button1 = buildbuttons.getButton1().get(j);
                 Button button2 = buildbuttons.getButton2().get(j);
                 if ((clickx == button2.getX() && clicky == button2.getY()) || (clickx == button1.getX() && clicky == button1.getY())) {
-                    batch.draw(button1.getTextureclick(), button1.getXpix(), button1.getYpix());
-                    batch.draw(button2.getTextureclick2(), button2.getXpix(), button2.getYpix());
+                    batch.draw(button1.getTextureclick(), button1.getXpix(), button1.getYpix(),55,55);
+                    batch.draw(button2.getTextureclick2(), button2.getXpix(), button2.getYpix(),55,55);
                     buildfigure = j;
                 } else {
-                    batch.draw(button1.getTexture(), button1.getXpix(), button1.getYpix());
-                    batch.draw(button2.getTexture2(), button2.getXpix(), button2.getYpix());
+                    batch.draw(button1.getTexture(), button1.getXpix(), button1.getYpix(),55,55);
+                    batch.draw(button2.getTexture2(), button2.getXpix(), button2.getYpix(),55,55);
                 }
             }
 
@@ -196,23 +203,23 @@ public class main extends ApplicationAdapter {
             if (i == 6 || i == 7 || i == 8 || i == 163 || i == 162 || i == 164) {
 
             } else {
-                batch.draw(fields.getTextures().get(0), fields.Xpix, fields.Ypix);
+                batch.draw(fields.getTextures().get(0), fields.Xpix, fields.Ypix,81,81);
             }
             if (attackmalen != null) {
                 for (int attack : attackmalen) {
                     if (attack == i && attack > 0 && attack < 170) {
-                        batch.draw(fields.getTextures().get(2), fields.Xpix, fields.Ypix);
+                        batch.draw(fields.getTextures().get(2), fields.Xpix, fields.Ypix,81,81);
                     }
                 }
                 if (bewegenmalen != null) {
                     for (int move : bewegenmalen) {
                         for (Figures figure : figures) {
                             if (move == i && move > 0 && move < 170 && fields.X == figure.getX() && fields.Y == figure.getY() && figure.getPlayer() != playerturn) {
-                                batch.draw(fields.getTextures().get(2), fields.Xpix, fields.Ypix);
+                                batch.draw(fields.getTextures().get(2), fields.Xpix, fields.Ypix,81,81);
                             } else if (move == i && move > 0 && move < 170 && fields.X == figure.getX() && fields.Y == figure.getY() && figure.getPlayer() == playerturn) {
-                                batch.draw(fields.getTextures().get(0), fields.Xpix, fields.Ypix);
+                                batch.draw(fields.getTextures().get(0), fields.Xpix, fields.Ypix,81,81);
                             } else if (move == i && move > 0 && move < 170) {
-                                batch.draw(fields.getTextures().get(1), fields.Xpix, fields.Ypix);
+                                batch.draw(fields.getTextures().get(1), fields.Xpix, fields.Ypix,81,81);
                             }
                         }
                     }
@@ -222,12 +229,12 @@ public class main extends ApplicationAdapter {
                 Button button1 = buildbuttons.getButton1().get(j);
                 Button button2 = buildbuttons.getButton2().get(j);
                 if ((clickx == button2.getX() && clicky == button2.getY()) || (clickx == button1.getX() && clicky == button1.getY())) {
-                    batch.draw(button1.getTextureclick(), button1.getXpix(), button1.getYpix());
-                    batch.draw(button2.getTextureclick2(), button2.getXpix(), button2.getYpix());
+                    batch.draw(button1.getTextureclick(), button1.getXpix(), button1.getYpix(),55,55);
+                    batch.draw(button2.getTextureclick2(), button2.getXpix(), button2.getYpix(),55,55);
                     buildfigure = j;
                 } else {
-                    batch.draw(button1.getTexture(), button1.getXpix(), button1.getYpix());
-                    batch.draw(button2.getTexture2(), button2.getXpix(), button2.getYpix());
+                    batch.draw(button1.getTexture(), button1.getXpix(), button1.getYpix(),55,55);
+                    batch.draw(button2.getTexture2(), button2.getXpix(), button2.getYpix(),55,55);
                 }
             }
         }
@@ -239,7 +246,7 @@ public class main extends ApplicationAdapter {
     public void getsend() {
 
         String send = becomestring;
-        String[] resultfigure = send.split("-");
+        String[] resultfigure = send.split("/");
         ArrayList<Figures> figuressend = new ArrayList<>();
         for (String figurestring : resultfigure) {
             String[] resultfigurestats = figurestring.split("#");
@@ -301,12 +308,12 @@ public class main extends ApplicationAdapter {
         if (fields.X == figur.getX() && fields.Y == figur.getY()) {
             if (figur instanceof Castle) {
                 if (!build) {
-                    batch.draw(figur.getSpriteclick(), fields.Xpix, fields.Ypix);
+                    batch.draw(figur.getSpriteclick(), fields.Xpix, fields.Ypix,81,81);
                 }
             } else if (fields.X == clickx && fields.Y == clicky) {
-                batch.draw(figur.getSpriteclick(), fields.Xpix + 25, fields.Ypix + 25);
+                batch.draw(figur.getSpriteclick(), fields.Xpix + 13, fields.Ypix + 13,55,55);
             } else {
-                batch.draw(figur.getSprite(), fields.Xpix + 25, fields.Ypix + 25);
+                batch.draw(figur.getSprite(), fields.Xpix + 13, fields.Ypix + 13,55,55);
             }
         }
     }
@@ -591,7 +598,7 @@ public class main extends ApplicationAdapter {
     public void send() {
         sendstring = "";
         for (Figures sendfigures : figures) {
-            sendstring += sendfigures.getName() + "#" + sendfigures.getPlayer() + "#" + sendfigures.getLive() + "#" + sendfigures.getX() + "#" + sendfigures.getY() + "-";
+            sendstring += sendfigures.getName() + "#" + sendfigures.getPlayer() + "#" + sendfigures.getLive() + "#" + sendfigures.getX() + "#" + sendfigures.getY() + "/";
         }
         Thread t1 = new Thread(new Client(socket));
         t1.start();

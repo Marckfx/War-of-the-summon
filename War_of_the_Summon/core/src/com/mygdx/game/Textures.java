@@ -3,7 +3,6 @@ package com.mygdx.game;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Textures {
-
     Texture empty = new Texture("Feldleer.png");
     Texture move = new Texture("Feldanbewegen.png");
     Texture attack = new Texture("Feldangriff.png");
@@ -72,6 +71,10 @@ public class Textures {
     Texture waechter2click = new Texture("Waechter2click.png");
 
     Texture loading= new Texture("Loading.png");
+
+    public Textures() {
+
+    }
 
     public Texture getLoading() {
         return loading;

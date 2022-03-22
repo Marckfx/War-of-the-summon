@@ -10,7 +10,7 @@ public class Field {
         fieldparts.add(new Fieldparts(0,0,0,0));
         for (int i = 0; i < 13; i++) {
             for (int j = 0; j < 13; j++) {
-                fieldparts.add(new Fieldparts(j*151,i*151,i,j));
+                fieldparts.add(new Fieldparts(j*82,i*82,i,j));
             }
         }
     }

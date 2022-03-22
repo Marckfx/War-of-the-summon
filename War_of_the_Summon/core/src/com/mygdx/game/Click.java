@@ -7,11 +7,11 @@ public class Click {
     private int mousex = 0;
     private int mousey = 0;
     public int clicksx() {
-            mousex = Gdx.input.getX()/151;
+            mousex = Gdx.input.getX()/82;
             return mousex;
     }
     public int clicksy() {
-            mousey = Math.abs(Gdx.input.getY()-1963)/151;
+            mousey = Math.abs(Gdx.input.getY()-1080)/82;
             return mousey;
 
     }
