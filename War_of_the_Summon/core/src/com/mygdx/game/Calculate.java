@@ -5,7 +5,7 @@ import figures.Figures;
 import java.util.ArrayList;
 
 public class Calculate {
-    int[] bewegen;
+    private int[] bewegen;
 
     /**Berechnet die Felder auf denen man sich bewegen kann
      *
