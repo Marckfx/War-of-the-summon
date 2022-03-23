@@ -10,11 +10,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import figures.*;
-
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+
+import figures.*;
 
 public class main extends ApplicationAdapter {
     SpriteBatch batch;
@@ -50,7 +50,12 @@ public class main extends ApplicationAdapter {
     private String becomestring;
     Texture loading;
     int restartcounter = 1800;
-
+    int ID;
+    String username = null;
+    String password = null;
+    boolean singup = false;
+    boolean textshown = false;
+    Keyboard keyboard = new Keyboard();
 
     @Override
     public void create() {
@@ -76,51 +81,86 @@ public class main extends ApplicationAdapter {
     public void render() {
         ScreenUtils.clear(0, 0, 0, 1);
         batch.begin();
-        if (gamestart && !player1win && !player2win) {
-            if (newturn) {
-                getsend();
+        if (username != null && password != null && !singup) {
+            singin();
+        }
+        if (singup) {
+
+            if (gamestart && !player1win && !player2win) {
+                if (newturn) {
+                    getsend();
+                }
+                if (player == playerturn) {
+                    clickhandler();
+                    if (build) {
+                        buildphase();
+                    } else {
+                        gamephase();
+                    }
+                }
+                for (int i = 1; i < field.getFieldparts().size(); i++) {
+                    Fieldparts fields = field.getFieldparts().get(i);
+                    drawfield(fields, i);
+                    drawattackandmove(fields, i);
+                    for (Figures figure : figures) {
+                        drawfigures(fields, figure);
+                        clickfigures(fields, i, figure);
+                    }
+                    movefigur(fields, i);
+                    attackfigure(fields, i);
+                }
+                drawbutton();
+                if (buildfigur != null) {
+                    figures.add(buildfigur);
+                    buildfigur = null;
+                }
+                drawstats();
+                deletdeadfigurs();
+            } else if (!gamestart && !player1win && !player2win) {
+                loading = new Texture("Loading.png");
+                batch.draw(loading, 700, 900);
             }
-            if (player == playerturn) {
-                clickhandler();
-                if (build) {
-                    buildphase();
-                } else {
-                    gamephase();
+
+            end();
+
+            if (player2win || player1win) {
+                restartcounter--;
+                BitmapFont figurstats = new BitmapFont();
+                figurstats.draw(batch, "Noch" + Math.round(restartcounter / 60f) + " Sekunden bis das Spiel sich Schließt oder drücke Leertaste", 550, 350);
+                if (restartcounter <= 0 || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                    System.exit(0);
                 }
             }
-            for (int i = 1; i < field.getFieldparts().size(); i++) {
-                Fieldparts fields = field.getFieldparts().get(i);
-                drawfield(fields, i);
-                drawattackandmove(fields, i);
-                for (Figures figure : figures) {
-                    drawfigures(fields, figure);
-                    clickfigures(fields, i, figure);
+
+        } else {
+            if (!textshown&&username==null){
+                BitmapFont figurstats = new BitmapFont();
+                figurstats.getData().scale(2);
+                figurstats.draw(batch, "bitte gib dein Usernamen ein und bestätige mit Enter", 350, 750);
+                String input= keyboard.buttonpress();
+                figurstats.draw(batch,input, 450, 550);
+                if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+                    username=input;
+                    textshown=true;
+                    keyboard.setX("");
+                    System.out.println(username);
                 }
-                movefigur(fields, i);
-                attackfigure(fields, i);
             }
-            drawbutton();
-            if (buildfigur != null) {
-                figures.add(buildfigur);
-                buildfigur = null;
+            if(textshown&&password==null){
+                BitmapFont figurstats = new BitmapFont();
+                figurstats.getData().scale(2);
+                figurstats.draw(batch, "bitte gib dein Passwort ein und bestätige mit enter", 350, 750);
+                String input= keyboard.buttonpress();
+                figurstats.draw(batch,input, 450, 550);
+                if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)&&input.length()>0){
+                    password=input;
+                    System.out.println(password);
+                    textshown=false;
+                }
             }
-            drawstats();
-            deletdeadfigurs();
-        } else if (!gamestart && !player1win && !player2win) {
-            loading = new Texture("Loading.png");
-            batch.draw(loading, 700, 900);
+
         }
 
-        end();
-
-        if (player2win || player1win) {
-            restartcounter--;
-            BitmapFont figurstats = new BitmapFont();
-            figurstats.draw(batch, "Noch Sekunden bis das Spiel sich Schließt oder drücke Leertaste" + Math.round(restartcounter / 60f), 550, 350);
-            if (restartcounter <= 0 || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                System.exit(0);
-            }
-        }
         batch.end();
     }
 
@@ -671,8 +711,8 @@ public class main extends ApplicationAdapter {
                 win = new Texture("Player2win.png");
                 batch.draw(win, 550, 400);
                 sendstring = "win2";
-                if (!sendpoints) {
-                    points(2);
+                if (!sendpoints && player == 2) {
+                    points();
                     sendpoints = true;
                 }
                 Thread t1 = new Thread(new Client(socket));
@@ -681,8 +721,8 @@ public class main extends ApplicationAdapter {
                 win = new Texture("Player2win.png");
                 batch.draw(win, 550, 400);
                 sendstring = "win1";
-                if (!sendpoints) {
-                    points(1);
+                if (!sendpoints && player == 1) {
+                    points();
                     sendpoints = true;
                 }
                 Thread t1 = new Thread(new Client(socket));
@@ -691,9 +731,67 @@ public class main extends ApplicationAdapter {
         }
     }
 
-    public void points(int player) {
-        
 
+    public void points() {
+        try {
+            URL url = new URL("http://185.194.217.213:8080/api/ranking/wonGame?key=dubsky&id=" + ID);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setConnectTimeout(6666);
+            connection.setReadTimeout(6666);
+            int result = connection.getResponseCode();
+
+            BufferedReader input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String ausgabe;
+            StringBuffer ausgabeP = new StringBuffer();
+            while ((ausgabe = input.readLine()) != null) {
+                ausgabeP.append(ausgabe);
+            }
+            input.close();
+            connection.disconnect();
+
+        } catch (IOException e) {
+        }
+    }
+
+    public void singin() {
+        try {
+            URL url = new URL("http://185.194.217.213:8080/api/user/login?key=dubsky&username=" + username + "&password=" + password);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setConnectTimeout(6666);
+            connection.setReadTimeout(6666);
+            int result = connection.getResponseCode();
+
+            BufferedReader input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String ausgabe;
+            StringBuffer ausgabeP = new StringBuffer();
+            while ((ausgabe = input.readLine()) != null) {
+                ausgabeP.append(ausgabe);
+            }
+            input.close();
+            connection.disconnect();
+            System.out.println(ausgabeP);
+            if (ausgabeP.length() > 5) {
+                String ausgabe2 = String.valueOf(ausgabeP);
+                String[] ausgabe3 = ausgabe2.split("\"");
+                String ausgabe4 = ausgabe3[2].replace(":", "");
+                ausgabe4 = ausgabe4.replace(",", "");
+                System.out.println(ausgabe4);
+                ID = Integer.parseInt(ausgabe4);
+                singup = true;
+
+            } else {
+                password = null;
+                username = null;
+                textshown = false;
+                keyboard.setX("");
+            }
+        } catch (IOException e) {
+
+        }
     }
 
     public void connection() {
@@ -705,6 +803,7 @@ public class main extends ApplicationAdapter {
             e.printStackTrace();
         }
     }
+
 
     class Client extends Thread {
 
@@ -786,6 +885,7 @@ public class main extends ApplicationAdapter {
         }
 
     }
+
 }
 
 
