@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import figures.*;
 
 public class main extends ApplicationAdapter {
+
     SpriteBatch batch;
     Maxlive maxlive = new Maxlive();
     Field field = new Field();
@@ -57,11 +58,14 @@ public class main extends ApplicationAdapter {
     boolean textshown = false;
     Keyboard keyboard = new Keyboard();
     String key="marck1826158128561825621785618";
+    BitmapFont figurstats ;
 
     @Override
     public void create() {
         connection();
         batch = new SpriteBatch();
+        figurstats = new BitmapFont();
+        figurstats.getData().scale(1.3f);
         field.generatField();
         buildbuttons.Buildbutton();
         Feste castle = new Feste(1, 0, 5, 15);
@@ -123,8 +127,6 @@ public class main extends ApplicationAdapter {
             end();
             if (player2win || player1win) {
                 restartcounter--;
-                BitmapFont figurstats = new BitmapFont();
-                figurstats.getData().scale(2);
                 figurstats.draw(batch, "Noch" + Math.round(restartcounter / 60f) + " Sekunden bis das Spiel sich Schließt oder drücke Leertaste", 550, 350);
                 if (restartcounter <= 0 || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                     System.exit(0);
@@ -132,8 +134,6 @@ public class main extends ApplicationAdapter {
             }
         } else {
             if (!textshown&&username==null){
-                BitmapFont figurstats = new BitmapFont();
-                figurstats.getData().scale(2);
                 figurstats.draw(batch, "bitte gib dein Usernamen ein und bestätige mit Enter", 350, 750);
                 String input= keyboard.buttonpress();
                 figurstats.draw(batch,input, 450, 550);
@@ -145,8 +145,6 @@ public class main extends ApplicationAdapter {
                 }
             }
             if(textshown&&password==null){
-                BitmapFont figurstats = new BitmapFont();
-                figurstats.getData().scale(2);
                 figurstats.draw(batch, "bitte gib dein Passwort ein und bestätige mit enter", 350, 750);
                 String input= keyboard.buttonpress();
                 figurstats.draw(batch,input, 450, 550);
@@ -186,8 +184,8 @@ public class main extends ApplicationAdapter {
      */
     public void drawstats() {
         if (clickf != null) {
-            BitmapFont figurstats = new BitmapFont();
-            figurstats.getData().scale(1.3f);
+
+
             if (clickf.getPlayer() == 1) {
                 figurstats.setColor(Color.GREEN);
             } else {
@@ -207,9 +205,8 @@ public class main extends ApplicationAdapter {
             } else {
                 figurstats.draw(batch, "Leben: " + clickf.getLive(), 1300, 847);
             }
+
         }
-        BitmapFont figurstats = new BitmapFont();
-        figurstats.getData().scale(1.3f);
         figurstats.draw(batch, "Du bist Spieler " + player, 1300, 807);
     }
 
