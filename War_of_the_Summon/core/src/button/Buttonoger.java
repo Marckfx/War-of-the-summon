@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.Textures;
 
 public class Buttonoger extends Button {
-    Textures textures = new Textures();
+
     Texture texture;
     Texture textureclick;
     Texture texture2;
@@ -13,10 +13,10 @@ public class Buttonoger extends Button {
 
     public Buttonoger(int XPix, int YPix, int x, int y) {
         super(XPix, YPix, x, y);
-        this.texture = textures.getOger1();
-        this.textureclick = textures.getOger1click();
-        this.texture2 = textures.getOger2();
-        this.textureclick2 = textures.getOger2click();
+        this.texture = Textures.oger1;
+        this.textureclick = Textures.oger1click;
+        this.texture2 = Textures.oger2;
+        this.textureclick2 = Textures.oger2click;
 
     }
 

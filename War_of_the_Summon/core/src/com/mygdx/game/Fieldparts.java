@@ -5,11 +5,11 @@ import com.badlogic.gdx.graphics.Texture;
 import java.util.ArrayList;
 
 public class Fieldparts {
-    int X = 0;
-    int Y = 0;
-    int Xpix=0;
-    int Ypix=0;
-    Textures texture =new Textures();
+    int X;
+    int Y;
+    int Xpix;
+    int Ypix;
+
     ArrayList<Texture> textures = new ArrayList();
 
     public Fieldparts(int Xpix, int Ypix,int X,int Y) {
@@ -17,12 +17,12 @@ public class Fieldparts {
         this.Y = Y;
         this.Xpix=Xpix;
         this.Ypix=Ypix;
-        textures.add(texture.getEmpty());
-        textures.add(texture.getMove());
-        textures.add(texture.getAttack());
-        textures.add(texture.getAction());
-        textures.add(texture.getCastle1());
-        textures.add(texture.getCastle2());
+        textures.add(Textures.empty);
+        textures.add(Textures.move);
+        textures.add(Textures.attack);
+        textures.add(Textures.action);
+        textures.add(Textures.castle1);
+        textures.add(Textures.castle2);
     }
 
     public int getX() {

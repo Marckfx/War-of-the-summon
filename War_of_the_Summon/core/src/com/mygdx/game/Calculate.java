@@ -92,9 +92,6 @@ public class Calculate {
      * @return Gibt die Felder zurück auf denen angegriffen werden kann
      */
     public int[] calculateattack(int x, int y, int i, Figures figur) {
-
-
-
             if (!figur.isMoved() && !figur.isAttacked()) {
                return attackwithoutmove(figur, i, x, y);
             }
@@ -130,15 +127,11 @@ public class Calculate {
                     z = m;
                 }
             }
-
-
             for (int m = 0; m <= figure.getMove() + figure.getAttackrange(); m++) {
                 int start = ((figure.getMove() + figure.getAttackrange()) * -1) + b;
                 int ende = (figure.getMove() + figure.getAttackrange()) - b;
                 for (int n = start; n <= ende; n++) {
-
                     o = i - (13 * m) + n;
-
                     if (!(o == i) && o > -1 && o < 169) {
                         if (n < 0 && o >= 13 * (z - m) + 1) {
                             h[k] = o;

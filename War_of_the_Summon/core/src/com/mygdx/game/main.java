@@ -86,7 +86,6 @@ public class main extends ApplicationAdapter {
             singin();
         }
         if (singup) {
-
             if (gamestart && !player1win && !player2win) {
                 if (newturn) {
                     getsend();
@@ -121,9 +120,7 @@ public class main extends ApplicationAdapter {
                 loading = new Texture("Loading.png");
                 batch.draw(loading, 700, 900);
             }
-
             end();
-
             if (player2win || player1win) {
                 restartcounter--;
                 BitmapFont figurstats = new BitmapFont();
@@ -133,7 +130,6 @@ public class main extends ApplicationAdapter {
                     System.exit(0);
                 }
             }
-
         } else {
             if (!textshown&&username==null){
                 BitmapFont figurstats = new BitmapFont();
@@ -160,9 +156,7 @@ public class main extends ApplicationAdapter {
                     textshown=false;
                 }
             }
-
         }
-
         batch.end();
     }
 
@@ -214,7 +208,6 @@ public class main extends ApplicationAdapter {
                 figurstats.draw(batch, "Leben: " + clickf.getLive(), 1300, 847);
             }
         }
-
         BitmapFont figurstats = new BitmapFont();
         figurstats.getData().scale(1.3f);
         figurstats.draw(batch, "Du bist Spieler " + player, 1300, 807);

@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.Textures;
 
 public class Buttonuruk extends Button {
-    Textures textures = new Textures();
+
     Texture texture;
     Texture textureclick;
     Texture texture2;
@@ -13,10 +13,10 @@ public class Buttonuruk extends Button {
 
     public Buttonuruk(int XPix, int YPix, int x, int y) {
         super(XPix, YPix, x, y);
-        this.texture = textures.getUruk1();
-        this.textureclick = textures.getUruk1click();
-        this.texture2 = textures.getUruk2();
-        this.textureclick2 = textures.getUruk2click();
+        this.texture = Textures.uruk1;
+        this.textureclick = Textures.uruk1click;
+        this.texture2 = Textures.uruk2;
+        this.textureclick2 = Textures.uruk2click;
 
     }
 

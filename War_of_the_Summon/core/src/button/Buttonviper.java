@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.Textures;
 
 public class Buttonviper extends Button {
-    Textures textures = new Textures();
+
     Texture texture;
     Texture textureclick;
     Texture texture2;
@@ -13,10 +13,10 @@ public class Buttonviper extends Button {
 
     public Buttonviper(int XPix, int YPix, int x, int y) {
         super(XPix, YPix, x, y);
-        this.texture = textures.getViper1();
-        this.textureclick = textures.getViper1click();
-        this.texture2 = textures.getViper2();
-        this.textureclick2 = textures.getViper2click();
+        this.texture = Textures.viper1;
+        this.textureclick = Textures.viper1click;
+        this.texture2 = Textures.viper2;
+        this.textureclick2 = Textures.viper2click;
 
     }
 
