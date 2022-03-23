@@ -121,8 +121,8 @@ public class main extends ApplicationAdapter {
                 drawstats();
                 deletdeadfigurs();
             } else if (!gamestart && !player1win && !player2win) {
-                loading = new Texture("Loading.png");
-                batch.draw(loading, 700, 900);
+
+                batch.draw(Textures.loading, 700, 900);
             }
             end();
             if (player2win || player1win) {
@@ -265,9 +265,9 @@ public class main extends ApplicationAdapter {
      */
     public void drawfield(Fieldparts fields, int i) {
         if (playerturn == 1) {
-            batch.draw(new Texture("Spieler1.png"), 1794, 0, 55, 55);
+            batch.draw(Textures.spieler1, 1794, 0, 80, 80);
         } else {
-            batch.draw(new Texture("Spieler2.png"), 1794, 0, 55, 55);
+            batch.draw(Textures.spieler2, 1794, 0, 80, 80);
         }
         boolean festepos = i == 6 || i == 7 || i == 8 || i == 163 || i == 162 || i == 164;
         if (build) {

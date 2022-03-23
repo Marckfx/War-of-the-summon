@@ -70,5 +70,7 @@ public class Textures {
     public final static Texture waechter1click = new Texture("Waechter1click.png");
     public final static Texture waechter2click = new Texture("Waechter2click.png");
 
-
+public final static Texture loading=new Texture("Loading.png");
+    public final static Texture spieler1=new Texture("Spieler1.png");
+    public final static Texture spieler2=new Texture("Spieler2.png");
 }
