@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import figures.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -90,7 +91,7 @@ public class main extends ApplicationAdapter {
             for (int i = 1; i < field.getFieldparts().size(); i++) {
                 Fieldparts fields = field.getFieldparts().get(i);
                 drawfield(fields, i);
-                drawattackandmove(fields,i);
+                drawattackandmove(fields, i);
                 for (Figures figure : figures) {
                     drawfigures(fields, figure);
                     clickfigures(fields, i, figure);
@@ -98,7 +99,7 @@ public class main extends ApplicationAdapter {
                 movefigur(fields, i);
                 attackfigure(fields, i);
             }
-           drawbutton();
+            drawbutton();
             if (buildfigur != null) {
                 figures.add(buildfigur);
                 buildfigur = null;
@@ -175,7 +176,13 @@ public class main extends ApplicationAdapter {
         figurstats.draw(batch, "Du bist Spieler " + player, 1794, 917);
     }
 
-    public void drawattackandmove(Fieldparts fields, int i){
+    /**
+     * Malt die Felder, auf denen man sich bewegen und angreifen kann
+     *
+     * @param fields Gibt das Feld an das geprüft wir
+     * @param i      Gibt die zahl an wo das feld im array liegt
+     */
+    public void drawattackandmove(Fieldparts fields, int i) {
         if (attackmalen != null) {
             for (int attack : attackmalen) {
                 if (attack == i && attack > 0 && attack < 170) {
@@ -197,7 +204,11 @@ public class main extends ApplicationAdapter {
             }
         }
     }
-    public void drawbutton(){
+
+    /**
+     * Zeichnet die buttons für die Bauphase
+     */
+    public void drawbutton() {
         for (int j = 0; j < buildbuttons.getButton1().size(); j++) {
             Button button1 = buildbuttons.getButton1().get(j);
             Button button2 = buildbuttons.getButton2().get(j);
@@ -216,7 +227,7 @@ public class main extends ApplicationAdapter {
      * Zeichnet das Feld
      *
      * @param fields Gibt das Feld an das geprüft wir
-     * @param i Gibt die zahl an wo das feld im array liegt
+     * @param i      Gibt die zahl an wo das feld im array liegt
      */
     public void drawfield(Fieldparts fields, int i) {
         if (playerturn == 1) {
@@ -227,20 +238,18 @@ public class main extends ApplicationAdapter {
         boolean festepos = i == 6 || i == 7 || i == 8 || i == 163 || i == 162 || i == 164;
         if (build) {
             if (festepos) {
+                assert true;
             } else if (i <= 13 * 3) {
                 batch.draw(fields.getTextures().get(4), fields.Xpix, fields.Ypix, 81, 81);
             } else if (i >= 13 * 10 + 1) {
                 batch.draw(fields.getTextures().get(5), fields.Xpix, fields.Ypix, 81, 81);
             }
-
-
         } else {
             if (festepos) {
-
+                assert true;
             } else {
                 batch.draw(fields.getTextures().get(0), fields.Xpix, fields.Ypix, 81, 81);
             }
-
         }
     }
 
@@ -267,11 +276,11 @@ public class main extends ApplicationAdapter {
     /**
      * Erzeugt eine Figur aus den übertragenen Daten
      *
-     * @param check Gibt an welchen Namen die Figur hat
-     * @param playersend Gibt an welchem Spieler die Figur gehört
-     * @param xsend Gibt die X position der Figur an
-     * @param ysend Gibt die Y position der Figur an
-     * @param livesend Gibt das aktuelle Leben der Figur an
+     * @param check       Gibt an welchen Namen die Figur hat
+     * @param playersend  Gibt an welchem Spieler die Figur gehört
+     * @param xsend       Gibt die X position der Figur an
+     * @param ysend       Gibt die Y position der Figur an
+     * @param livesend    Gibt das aktuelle Leben der Figur an
      * @param figuressend Ist das array wo alle Figuren gespeichert werden
      */
     public void getrightfigure(String check, int playersend, int xsend, int ysend, int livesend, ArrayList<Figures> figuressend) {
@@ -322,7 +331,7 @@ public class main extends ApplicationAdapter {
      * Malt die Figur auf das Spielfeld
      *
      * @param fields Gibt das Feld die geprüft wir an
-     * @param figur Gibt die Figur die geprüft wir an
+     * @param figur  Gibt die Figur die geprüft wir an
      */
     public void drawfigures(Fieldparts fields, Figures figur) {
         if (fields.X == figur.getX() && fields.Y == figur.getY()) {
@@ -340,9 +349,10 @@ public class main extends ApplicationAdapter {
 
     /**
      * Überprüft welche Figur an der jeweiligen Position des Klicks ist und wählt diese aus
+     *
      * @param fields Gibt das Feld die geprüft wir an
-     * @param j Gibt die zahl an wo das feld im array liegt
-     * @param figur Gibt die Figur die geprüft wir an
+     * @param j      Gibt die zahl an wo das feld im array liegt
+     * @param figur  Gibt die Figur die geprüft wir an
      */
     public void clickfigures(Fieldparts fields, int j, Figures figur) {
         boolean reset = true;
@@ -482,7 +492,7 @@ public class main extends ApplicationAdapter {
      * Setzt die Figur an die Position des Rechtsklicks
      *
      * @param fields Gibt das Feld an das geprüft wir
-     * @param i Gibt die zahl an wo das feld im array liegt
+     * @param i      Gibt die zahl an wo das feld im array liegt
      */
     public void movefigur(Fieldparts fields, int i) {
         boolean moveble = true;
@@ -509,7 +519,7 @@ public class main extends ApplicationAdapter {
      * Greift figur an und nimmt ihre posiotion ein und schibt sie ein feld richtung ihrer Burg
      *
      * @param fields Gibt das Feld an das geprüft wir
-     * @param i Gibt die zahl an wo das feld im array liegt
+     * @param i      Gibt die zahl an wo das feld im array liegt
      */
     public void attackfigure(Fieldparts fields, int i) {
         boolean attackeble = false;
@@ -619,7 +629,7 @@ public class main extends ApplicationAdapter {
      * Sendet einen String mit allen Figuren an den server
      */
     public void send() {
-        sendstring = "";
+        sendstring = "/Figures#";
         for (Figures sendfigures : figures) {
             sendstring += sendfigures.getName() + "#" + sendfigures.getPlayer() + "#" + sendfigures.getLive() + "#" + sendfigures.getX() + "#" + sendfigures.getY() + "/";
         }
@@ -662,7 +672,7 @@ public class main extends ApplicationAdapter {
                 batch.draw(win, 550, 400);
                 sendstring = "win2";
                 if (!sendpoints) {
-
+                    points(2);
                     sendpoints = true;
                 }
                 Thread t1 = new Thread(new Client(socket));
@@ -672,13 +682,18 @@ public class main extends ApplicationAdapter {
                 batch.draw(win, 550, 400);
                 sendstring = "win1";
                 if (!sendpoints) {
-
+                    points(1);
                     sendpoints = true;
                 }
                 Thread t1 = new Thread(new Client(socket));
                 t1.start();
             }
         }
+    }
+
+    public void points(int player) {
+        
+
     }
 
     public void connection() {
