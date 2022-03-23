@@ -56,6 +56,7 @@ public class main extends ApplicationAdapter {
     boolean singup = false;
     boolean textshown = false;
     Keyboard keyboard = new Keyboard();
+    String key="marck1826158128561825621785618";
 
     @Override
     public void create() {
@@ -126,6 +127,7 @@ public class main extends ApplicationAdapter {
             if (player2win || player1win) {
                 restartcounter--;
                 BitmapFont figurstats = new BitmapFont();
+                figurstats.getData().scale(2);
                 figurstats.draw(batch, "Noch" + Math.round(restartcounter / 60f) + " Sekunden bis das Spiel sich Schließt oder drücke Leertaste", 550, 350);
                 if (restartcounter <= 0 || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                     System.exit(0);
@@ -191,29 +193,31 @@ public class main extends ApplicationAdapter {
     public void drawstats() {
         if (clickf != null) {
             BitmapFont figurstats = new BitmapFont();
+            figurstats.getData().scale(1.3f);
             if (clickf.getPlayer() == 1) {
                 figurstats.setColor(Color.GREEN);
             } else {
                 figurstats.setColor(Color.RED);
             }
-            figurstats.draw(batch, "Name: " + clickf.getName(), 1794, 1017);
-            figurstats.draw(batch, "Attacke: " + clickf.getAttack(), 1794, 997);
-            figurstats.draw(batch, "Bewegung: " + clickf.getMove(), 1794, 977);
-            figurstats.draw(batch, "Angriffsreichweite: " + clickf.getAttackrange(), 1794, 957);
+            figurstats.draw(batch, "Name: " + clickf.getName(), 1300, 1017);
+            figurstats.draw(batch, "Attacke: " + clickf.getAttack(), 1300, 967);
+            figurstats.draw(batch, "Bewegung: " + clickf.getMove(), 1300, 927);
+            figurstats.draw(batch, "Angriffsreichweite: " + clickf.getAttackrange(), 1300, 887);
             if (clickf instanceof Feste) {
                 if (clickf.getPlayer() == 1) {
-                    figurstats.draw(batch, "Leben: " + player1live, 1794, 937);
+                    figurstats.draw(batch, "Leben: " + player1live, 1300, 847);
                 } else {
-                    figurstats.draw(batch, "Leben: " + player2live, 1794, 937);
+                    figurstats.draw(batch, "Leben: " + player2live, 1300, 847);
                 }
 
             } else {
-                figurstats.draw(batch, "Leben: " + clickf.getLive(), 1794, 937);
+                figurstats.draw(batch, "Leben: " + clickf.getLive(), 1300, 847);
             }
         }
 
         BitmapFont figurstats = new BitmapFont();
-        figurstats.draw(batch, "Du bist Spieler " + player, 1794, 917);
+        figurstats.getData().scale(1.3f);
+        figurstats.draw(batch, "Du bist Spieler " + player, 1300, 807);
     }
 
     /**
@@ -669,7 +673,7 @@ public class main extends ApplicationAdapter {
      * Sendet einen String mit allen Figuren an den server
      */
     public void send() {
-        sendstring = "/Figures#";
+        sendstring = "";
         for (Figures sendfigures : figures) {
             sendstring += sendfigures.getName() + "#" + sendfigures.getPlayer() + "#" + sendfigures.getLive() + "#" + sendfigures.getX() + "#" + sendfigures.getY() + "/";
         }
@@ -734,7 +738,7 @@ public class main extends ApplicationAdapter {
 
     public void points() {
         try {
-            URL url = new URL("http://185.194.217.213:8080/api/ranking/wonGame?key=dubsky&id=" + ID);
+            URL url = new URL("http://185.194.217.213:8080/api/ranking/wonGame?key="+key+"&id=" + ID);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json");
@@ -757,7 +761,7 @@ public class main extends ApplicationAdapter {
 
     public void singin() {
         try {
-            URL url = new URL("http://185.194.217.213:8080/api/user/login?key=dubsky&username=" + username + "&password=" + password);
+            URL url = new URL("http://185.194.217.213:8080/api/user/login?key="+key+"&username=" + username + "&password=" + password);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Content-Type", "application/json");
